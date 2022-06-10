@@ -1,0 +1,39 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/layout/adminHeader.jspf" %>
+<main>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">금일 식단표</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table">
+						  <thead class="thead-dark">
+						    <tr align="center">
+						      <th><fmt:formatDate value="${menuplanner.today_date}" pattern="yyyy-MM-dd"/></th>
+						      <th>&nbsp;</th>
+						    </tr>
+						  </thead>
+						  <tbody id = body>
+						    <tr class="alert" role="alert" align="center">
+						      <th scope="row">${menuplanner.steamed_rice}</th>
+						      
+						    </tr>
+						    <tr class="alert" role="alert" align="center">
+						      <th scope="row">${menuplanner.soup}</th>
+						     
+						    </tr>
+						    <tr class="alert" role="alert" align="center">
+						      <th scope="row">${menuplanner.side_dish}</th>
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+</main>
+<%@ include file="/WEB-INF/layout/adminFooter.jspf" %>

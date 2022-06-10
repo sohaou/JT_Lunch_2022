@@ -1,0 +1,78 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<%
+	Date nowTime = new Date();
+	SimpleDateFormat datee = new SimpleDateFormat("yyyyMMddhhmmss");
+%>
+<%@ include file="/WEB-INF/layout/ownerHeader.jspf" %>
+<div class="container-fluid px-4">
+	<h1 class="mt-4">메뉴 등록</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item">식당운영자</li>
+			<li class="breadcrumb-item active">메뉴등록</li>
+		</ol>
+</div>
+<div id="layoutSidenav_content">
+<main>
+	<div class="container">
+	<div class="row">
+	<div class="col-sm-12 text-center" >
+	<div class="col-sm-3"></div>     
+	<div class="col-sm-6">
+		<form name="menuInsertForm" action="/owner/menuSave" method="post">
+			<table class="table table-boardered">
+				<tr><th></th><td><input type="hidden" name="menuId" value="<%=datee.format(nowTime) %>"></td></tr>
+					<tr>
+						<th>분류</th>
+						<td>
+							<select name="type" class="dataTable-selector">
+								<option value=""> ---------  분류  --------- </option>
+								<option value="밥">밥</option>
+								<option value="국">국</option>
+								<option value="반찬">반찬</option>
+								<!-- <option value="별미">별미</option>  -->
+					        </select>
+						</td>     
+					</tr>
+					<tr>
+						<th>메뉴명</th>
+						<td><input type="text"  name="menuName" placeholder="메뉴명을 적어주세요"></td>        
+					</tr>
+					<tr>
+						<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></td>
+						<td colspan="2">
+							<input type="button" class="btn btn-primary" value="등록" onclick="check_input()"/>
+							<input type="button" class="btn btn-secondary" value="취소" onclick="location.href='/owner/main'"/>
+						</td>
+					</tr>
+				</table>
+			</form>
+	</div>
+	</div>
+	</div>
+	</div>
+</main>
+<%@ include file="/WEB-INF/layout/adminFooter.jspf" %>
+</div>
+<script>
+function check_input() {
+	if (document.menuInsertForm.type.value==""){
+		alert("분류를 선택해주세요!");
+		document.menuInsertForm.type.focus();
+
+		return;
+	}
+	else if (!document.menuInsertForm.menuName.value){
+		alert("메뉴명을 입력해주세요!");
+		document.menuInsertForm.menuName.focus();
+
+		return;
+	}
+	document.menuInsertForm.submit();
+
+}
+</script>

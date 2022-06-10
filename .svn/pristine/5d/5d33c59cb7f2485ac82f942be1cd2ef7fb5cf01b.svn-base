@@ -1,0 +1,12 @@
+package egovframework.jtLunch.admin.owner.Service;
+
+import java.util.List;
+
+import egovframework.jtLunch.admin.owner.DTO.RequestDTO;
+
+public interface RequestService {
+	public List<?> printRequestAll()throws Exception;//요청사항출력
+	public RequestDTO selectRequest(String req_id)throws Exception;//요청사항상세보기
+	public int ownerCheck(String req_id) throws Exception;//식당운영자 요청사항 확인 업데이트
+	public int adminCheck(String req_id) throws Exception;//관리자 요청사항 확인 업데이트
+}

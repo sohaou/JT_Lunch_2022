@@ -1,0 +1,124 @@
+package egovframework.jtLunch.main.reservation.Controller;
+
+
+import java.io.PrintWriter;
+import java.time.LocalTime;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import egovframework.jtLunch.cmmn.security.DTO.CustomUserDetails;
+import egovframework.jtLunch.cmmn.security.Service.UserService;
+import egovframework.jtLunch.main.reservation.DTO.ReservationDTO;
+import egovframework.jtLunch.main.reservation.Service.ReservationService;
+
+@Controller
+public class ReservationController {
+	
+	Logger log = Logger.getLogger(getClass());
+	
+	@Inject
+	UserService userservice;
+	
+	@Inject
+	ReservationService reservationService;
+
+	
+	
+//	@RequestMapping(value="/user/reservePage", method=RequestMethod.GET)
+//	public String selectTeam(Model model) throws Exception{
+//		
+//		List<DivisionDTO> department = reservationService.selectDepartment();
+//		List<DivisionDTO> team = reservationService.selectTeam();
+//		
+//		model.addAttribute("Department", JSONArray.fromObject(department));
+//		model.addAttribute("Team", JSONArray.fromObject(team));
+//
+//		
+//		log.debug(JSONArray.fromObject(department));
+//		log.debug(JSONArray.fromObject(team));
+//		return "main/reservation/reservation";
+//	}
+//	
+//	@RequestMapping(value="/user/selectMember", method=RequestMethod.POST)
+//	public ModelAndView selectMember(HttpServletRequest request) throws Exception{
+//		
+//		ModelAndView mv = new ModelAndView("jsonView");
+//		
+//		String department = request.getParameter("department").toString();
+//		String team = request.getParameter("team").toString();
+//		
+//		Map<String ,Object> requestMap = new HashMap<String ,Object>();
+//		
+//		requestMap.put("department", department);
+//		requestMap.put("team", team);
+//		System.out.println(reservationService.reserveSelectUser(requestMap));
+//		 
+//		mv.addObject("selectUser", reservationService.reserveSelectUser(requestMap)); 
+//		 
+//		return mv;
+//	}
+	
+//	@RequestMapping(value="/user/selectTableTime", method=RequestMethod.POST)
+//	public void selectTable(@RequestParam("time") String no, Model model) throws Exception{
+//		
+//		ReserveTableDTO table = reservationService.selectTable(no);
+//		model.addAttribute("table", table);
+//
+//	}
+//	
+	@RequestMapping(value="/user/reserve", method=RequestMethod.GET)
+	public void reserve(Authentication authentication, ReservationDTO reservationDTO, HttpServletResponse response) throws Exception{
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out=response.getWriter();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+		
+		String id = "";
+		if(principal != null) {
+			id = auth.getName();	
+		}
+		
+		CustomUserDetails dto = userservice.selectUser(id);
+		
+		String res_id = dto.getUser_id();
+		String res_name = dto.getUser_name();
+		String res_tel = dto.getUser_tel();
+		String department = dto.getDepartment();
+		String team = dto.getTeam();
+		reservationDTO.setRes_id(res_id);
+		reservationDTO.setRes_name(res_name);
+		reservationDTO.setRes_tel(res_tel);
+		reservationDTO.setDepartment(department);
+		reservationDTO.setTeam(team);
+		LocalTime now = LocalTime.now();
+		int hour = now.getHour();
+		int minute = now.getMinute();
+
+        log.debug("=======================" + hour + minute + "======================"); 
+ 		log.debug("=======================" + reservationDTO + "======================");
+	
+ 		//10시 30분 이전까지 식사 예약	
+ 		
+		if(hour > 10 && minute > 30 || hour > 11 && minute < 30) {
+			out.println("<script>alert('금일 예약이 마감되었습니다.');location.href='/user/menuplanner';</script>");
+			out.flush();
+		}
+	
+		else {
+	
+			reservationService.reserve(reservationDTO);
+			out.println("<script>alert('예약이 완료되었습니다.'); location.href='/user/menuplanner';</script>");
+			out.flush();
+			
+		}
+	}
+}

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ownerNotice">
+	<!-- 식당 운영자 공지사항 출력 -->
+	<select id="OwnerNoticePrint" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO" resultType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		SELECT 
+			notice_id, 
+			title, 
+			content, 
+			writer, 
+			DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as up_date, 
+			user_check, 
+			editor, 
+			DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as edit_time
+		FROM 
+			notice
+	</select>
+	<!-- 식당 운영자 공지사항 입력 -->
+	<insert id="OwnerNoticeInsert" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		INSERT INTO notice 
+			(
+				notice_id, 
+				title, 
+				content, 
+				writer
+			)
+		VALUES
+			(
+				(select ifnull(MAX(notice_id)+1, 1) from notice a), 
+				#{title}, 
+				#{content}, 
+				"식당운영자"
+			)	
+	</insert>
+	<!-- 식당 운영자 공지사항 상세보기 -->
+	<select id="OwnerNoticeDetail" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO" resultType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		SELECT 
+			notice_id, 
+			title, 
+			content, 
+			writer, 
+			DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as up_date, 
+			user_check, 
+			editor, 
+			DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as edit_time
+		FROM 
+			notice
+		WHERE 
+			notice_id=#{notice_id}
+	</select>
+	<!-- 식당 운영자 공지사항 수정 -->
+	<update id="OwnerNoticeUpdate" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		UPDATE 
+			notice
+		SET 
+			title=#{title}, content=#{content}, editor='식당운영자', edit_time=date_format(NOW(),'%Y-%m-%d %H:%i:%s')
+		WHERE 
+			notice_id=#{notice_id}
+	</update>
+	<!-- 식당 운영자 공지사항 삭제 -->
+	<delete id="OwnerNoticeDelete" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		DELETE
+		FROM 
+			notice
+		WHERE 
+			notice_id=#{notice_id} 
+	</delete>
+	<!-- 공지사항 삭제 후 공지사항 글 번호 정리 -->
+	<update id="OwnerCountUpdate">
+		UPDATE 
+			notice
+		SET
+			notice.notice_id = @cnt:=@cnt+1
+	</update>
+	<update id="OwnerCountSet">
+		SET @cnt=0
+	</update>
+</mapper>
+

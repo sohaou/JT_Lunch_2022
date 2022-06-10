@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dashBoard">
+
+	<select id="getChartData" resultType="egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO">
+		SELECT
+			(
+			SELECT COUNT(*)
+			FROM reserve
+			WHERE res_check = 1
+			AND DATE_FORMAT(res_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 0 )
+			) AS mon,
+			(
+			SELECT COUNT(*)
+			FROM reserve
+			WHERE res_check = 1
+			AND DATE_FORMAT(res_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 1 )
+			) AS tue,
+			(
+			SELECT COUNT(*)
+			FROM reserve
+			WHERE res_check = 1
+			AND DATE_FORMAT(res_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 2 )
+			) AS wen,
+			(
+			SELECT COUNT(*)
+			FROM reserve
+			WHERE res_check = 1
+			AND DATE_FORMAT(res_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 3 )
+			) AS thu,
+			(
+			SELECT COUNT(*)
+			FROM reserve
+			WHERE res_check = 1
+			AND DATE_FORMAT(res_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 4 )
+			) AS fri
+	</select>
+</mapper>

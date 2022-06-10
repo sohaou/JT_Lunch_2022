@@ -1,0 +1,36 @@
+package egovframework.jtLunch.admin.dashboard.DAO;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO;
+
+@Repository("dashBoardDAO")
+public class DashBoardDAO {
+	
+	@Autowired
+	private SqlSession sqlSession;
+	
+	public DashBoardDTO getChartData() throws Exception{
+		return sqlSession.selectOne("dashBoard.getChartData");
+	}
+	
+	public DashBoardDTO getChartMonth() throws Exception{
+		return sqlSession.selectOne("dashBoard.getChartMonth");
+	}
+
+	public int getmonthAte() throws Exception{
+		return sqlSession.selectOne("dashBoard.getmonthAte");
+	}
+	
+	public List<DashBoardDTO> searchUser() throws Exception{
+		return sqlSession.selectList("dashBoard.searchUser");
+	}
+	
+	public int deleteUser(String user_id) throws Exception{
+		return sqlSession.delete("dashBoard.deleteUser", user_id);
+	}
+}

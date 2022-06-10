@@ -1,0 +1,32 @@
+package egovframework.jtLunch.admin.owner.DAO;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.admin.owner.DTO.RequestDTO;
+
+
+@Repository("RequestDAO")
+public class RequestDAO {
+	@Inject
+	SqlSession sqlSession;
+	
+	//요청사항 출력
+	public List<?> printRequestAll(){
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("ownerRequest.printRequestAll");
+	}
+	//요청사항 상세보기
+	public RequestDTO selectRequest(String req_id){
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("ownerRequest.selectRequest",req_id);
+	}
+	//식당운영자 요청사항 확인 업데이트
+	public int ownerCheck(String req_id) throws Exception{
+		return sqlSession.update("ownerRequest.ownerCheck",req_id);
+	}
+}

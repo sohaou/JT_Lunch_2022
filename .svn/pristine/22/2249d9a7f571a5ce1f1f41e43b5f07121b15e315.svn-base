@@ -1,0 +1,186 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>식당 운영자 _ 식단 등록</title>
+<%@ include file="/WEB-INF/layout/adminHeader.jspf" %>
+<%
+	Date nowTime = new Date();
+	SimpleDateFormat today = new SimpleDateFormat("yyyy년 MM월 dd일");
+%>
+</head>
+<body>
+	<div id="layoutSidenav_content">
+	<main>
+		<div class="container">
+		<div class="row">
+		<div class="col-sm-12 text-center" >
+		<div class="col-sm-3"></div>     
+		<div class="col-sm-6">
+		<h2>식단 등록</h2><br>	
+		<font size="5.3em" face="Verdana"><%=today.format(nowTime) %></font>
+		<br><br>
+		<div id="menuplanner">
+				<form name="menuplan" role="form" method="post" autocomplete="off" action="admin/owner/menuplanSave">	
+				<div id="menuplus">	
+					<strong>* </strong>&nbsp;&nbsp;&nbsp;
+					<font size="3em" face="Verdana" font-style="bold">밥</font>
+					&nbsp;&nbsp;&nbsp;
+					<select class="rice">
+						<option value=""> ---- 메뉴명 ---- </option>
+					</select>
+					<br><br>
+					<strong>* </strong>&nbsp;&nbsp;&nbsp;
+					<font size="3em" face="Verdana" font-style="bold">국</font>
+					&nbsp;&nbsp;&nbsp;
+					<select class="soup">
+						<option value=""> ---- 메뉴명 ---- </option>
+					</select>
+					<br><br>
+					<strong>* </strong>&nbsp;&nbsp;&nbsp;
+					<font size="3em" face="Verdana" font-style="bold">반찬</font>
+					&nbsp;&nbsp;&nbsp;
+					<select class="sideDish">
+						<option value=""> ---- 메뉴명 ---- </option>
+					</select>
+					<input type="button" value="반찬 추가" onclick="addMenu();"/>
+					<br>
+					<div id='sd1' style='display:none'>
+						<select class="sideDish1">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd2' style='display:none'>
+						<select class="sideDish2">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd3' style='display:none'>
+						<select class="sideDish3">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd4' style='display:none'>
+						<select class="sideDish4">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd5' style='display:none'>
+						<select class="sideDish5">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd6' style='display:none'>
+						<select class="sideDish6">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd7' style='display:none'>
+						<select class="sideDish7">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd8' style='display:none'>
+						<select class="sideDish8">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br>
+					<div id='sd9' style='display:none'>
+						<select class="sideDish9">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</div>
+					<br><br>
+					<input type="submit" value="등록"/>
+					<input type="button" value="취소"/>
+					</div>
+				</form>
+		</div>
+		</div>
+		</div>
+		</div>
+		</div>
+	</main>
+	<%@ include file="/WEB-INF/layout/adminFooter.jspf" %>
+	</div>
+</body>
+<script>
+<%! int sideDish=0;%> //전역변수
+//컨트롤러에서 데이터 받기
+var jsonData = JSON.parse('${category}');
+console.log(jsonData);
+
+	var cate1Arr = new Array(); //밥
+	var cate1Obj = new Object(); //밥
+	
+	var cate2Arr = new Array(); //국
+	var cate2Obj = new Object(); //국
+	
+	var cate3Arr = new Array(); //반찬
+	var cate3Obj = new Object(); //반찬
+	
+	// 각 셀렉트 박스에 삽입할 데이터 준비
+	for(var i = 0; i < jsonData.length; i++) {
+	 
+	 if(jsonData[i].menu_type=="밥") {
+		 cate1Obj = new Object();  //초기화
+		 cate1Obj.menu_name = jsonData[i].menu_name;
+		 cate1Obj.menu_type = jsonData[i].menu_type;
+		 cate1Arr.push(cate1Obj);
+	 }
+	 else if(jsonData[i].menu_type=="국") {
+		 cate2Obj = new Object();  //초기화
+		 cate2Obj.menu_name = jsonData[i].menu_name;
+		 cate2Obj.menu_type = jsonData[i].menu_type;
+		 cate2Arr.push(cate2Obj);
+	 }
+	 else if(jsonData[i].menu_type=="반찬") {
+		 cate3Obj = new Object();  //초기화
+		 cate3Obj.menu_name = jsonData[i].menu_name;
+		 cate3Obj.menu_type = jsonData[i].menu_type;
+		 cate3Arr.push(cate3Obj);
+	 }
+	}
+
+	// 각 셀렉트 박스에 데이터 삽입
+	var cate1Select = $("select.rice") //밥 셀렉트박스
+	var cate2Select = $("select.soup") //국 셀렉트박스
+	var cate3Select = $("select.sideDish") //반찬 셀렉트박스
+	
+	for(var i = 0; i < cate1Arr.length; i++) {
+	 cate1Select.append("<option value='" + cate1Arr[i].menu_name + "'>"
+	      + cate1Arr[i].menu_name + "</option>"); 
+	}
+	for(var i = 0; i < cate2Arr.length; i++) {
+		 cate2Select.append("<option value='" + cate2Arr[i].menu_name + "'>"
+		      + cate2Arr[i].menu_name + "</option>"); 
+		}
+	for(var i = 0; i < cate3Arr.length; i++) {
+	 cate3Select.append("<option value='" + cate3Arr[i].menu_name + "'>"
+	      + cate3Arr[i].menu_name + "</option>"); 
+	}
+
+//메뉴 추가 버튼 클릭시 메뉴 선택할 수 있는 셀렉트박스 추가
+function addMenu(){
+	const element=document.getElementById('menuplus');
+	element.append();
+	sideDish++;
+	
+		$("#sd2").show();
+	}
+</script>
+</html>

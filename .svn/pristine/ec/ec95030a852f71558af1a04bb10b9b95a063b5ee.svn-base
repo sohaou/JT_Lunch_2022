@@ -1,0 +1,39 @@
+package egovframework.jtLunch.cmmn.join.Controller;
+
+import javax.inject.Inject;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import egovframework.jtLunch.cmmn.join.Service.JoinService;
+import egovframework.jtLunch.cmmn.security.DTO.CustomUserDetails;
+
+
+@Controller
+public class JoinController {
+
+	@Inject
+	JoinService service;
+	
+	@Inject
+	BCryptPasswordEncoder pwdEncoder;
+	
+	@RequestMapping(value="/registerform")
+	public String registerform() throws Exception{
+		return "main/login/join";
+	}
+	
+	@RequestMapping(value="/register", method = RequestMethod.POST)
+	public String register(CustomUserDetails customuserdetails) throws Exception {
+		
+		String PASSWORD = pwdEncoder.encode(customuserdetails.getPassword());
+		customuserdetails.setPassword(PASSWORD);
+		
+		service.register(customuserdetails);
+		System.out.println(customuserdetails);
+		return "redirect:/loginform";
+	}
+	
+}

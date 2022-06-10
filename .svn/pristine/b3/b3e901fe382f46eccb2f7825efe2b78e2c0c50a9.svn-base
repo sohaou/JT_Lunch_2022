@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuplanner">
+	<select id="selectmenu" parameterType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO" resultType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO">
+		SELECT 
+			today_date, steamed_rice, soup, side_dish
+		FROM
+			menuplanner
+		WHERE 
+			today_date = date_format(NOW(),'%Y-%m-%d')
+	</select>
+	
+	<update id="likeCountSteamedRice">
+		UPDATE
+			menulist
+		SET
+			like_count = (SELECT max(like_count) FROM menulist 
+			WHERE menu_name = #{steamed_rice})+1
+		WHERE 
+			menu_name = #{steamed_rice}
+	</update>
+	
+	<update id="likeCountSoup">
+		UPDATE
+			menulist
+		SET
+			like_count = (SELECT max(like_count) FROM menulist
+			WHERE menu_name = #{soup})+1
+		WHERE	
+			menu_name = #{soup}
+	</update>
+	
+	<update id="likeCountSideDish">
+		UPDATE
+			menulist
+		SET
+			like_count = (SELECT max(like_count) FROM menulist
+			WHERE menu_name = #{side_dish})+1
+		WHERE
+			menu_name = #{side_dish}			
+	</update>
+</mapper>

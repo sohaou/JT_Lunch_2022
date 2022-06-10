@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CheckAteUser">	
+	<!-- 금일 식사자 수 count -->
+	<select id="countTodayEat" parameterType="HashMap" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				ate_user
+			WHERE 
+				ATE_DATE = #{eatDate}  
+				AND FRANCHISE_ID = #{id}
+		]]>
+	</select>
+	<!-- 금일 예약자 수 출력 -->
+	<select id="countReserve" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			reserve
+		WHERE 
+			res_date = date_format(NOW(),'%Y-%m-%d')
+	</select> 
+	<!-- 캘린더(한달)동안의 식사자 수 출력 -->
+	<select id="countAteUser" resultType="int">
+		<![CDATA[	
+			SELECT 
+				COUNT(*)  
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+		]]>
+	</select>
+	<!--캘린더(한달)동안의 식사자 출력 -->
+	<select id="AteUserList" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		<![CDATA[
+			SELECT 
+				id, 
+				name, 
+				DATE_FORMAT(ate_date,'%Y-%m-%d') as ate_date, 
+				department, 
+				team, 
+				tel
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+			ORDER BY ate_date, name
+		]]>
+	</select>
+	<!-- 선택한 날짜의 식사자 출력 -->
+	<select id="DayAteUserAll" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		<![CDATA[
+			SELECT 
+				id, 
+				name, 
+				DATE_FORMAT(ate_date,'%Y-%m-%d') as ate_date, 
+				department,
+				team, 
+				tel 
+			FROM 
+				ate_user 
+			WHERE 
+				date_format(ate_date,'%Y-%m-%d') = #{ate_date}
+		]]>
+	</select>
+	<!-- 선택한 기간의 식사자 수 출력 -->
+	<select id="CountAteTerm" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*)  
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{startDate} AND #{endDate}
+		]]>
+	</select>
+	<select id="CountAteTermTable" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*)  
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{startDate} AND #{endDate}
+		]]>
+	</select>
+	<!-- 월에서 식사자가 있는 날 출력 -->
+	<select id="AteUserInMonth" resultType="HashMap">
+		<![CDATA[
+			SELECT 
+				COUNT(*) as ate_count, DATE_FORMAT(ate_date,'%d') as ate_date 
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+			GROUP BY
+				DATE_FORMAT(ate_date,'%Y-%m-%d')
+		]]>
+	</select>
+	<!-- 선택한 날짜의 식사자 수 출력 -->
+	<select id="CountAteUserDate" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*)  
+			FROM 
+				ate_user 
+			WHERE 
+				date_format(ate_date,'%Y-%m-%d') = #{ate_date} 
+		]]>	
+	</select>
+</mapper>

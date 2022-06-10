@@ -1,0 +1,21 @@
+package egovframework.jtLunch.main.webPage.Service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import egovframework.jtLunch.main.webPage.DAO.MenuplannerDAO;
+import egovframework.jtLunch.main.webPage.VO.MenuplannerVO;
+
+@Service("menuService")
+public class MenuplannerServiceImpl implements MenuplannerService{
+	
+	@Inject
+	private MenuplannerDAO menuplannerDAO;
+	
+	@Override
+	public MenuplannerVO selectmenu(MenuplannerVO menuplannervo) {
+		return menuplannerDAO.selectmenu(menuplannervo);
+	}
+
+}

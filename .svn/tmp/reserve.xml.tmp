@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserve">
+
+<select id="selectUser" resultType="egovframework.jtLunch.main.reservation.DTO.ReservationDTO">
+SELECT 
+	res_id, date_format(now(), '%Y-%m-%d') as res_date
+FROM
+	reserve
+WHERE
+	res_id = #{id} AND date_format(res_date, '%Y-%m-%d') = curdate()
+</select>
+
+<select id="selectQrUser" resultType="egovframework.jtLunch.main.reservation.DTO.ReservationQRDTO">
+SELECT 
+	id, date_format(now(), '%Y-%m-%d') as ate_date
+FROM
+	ate_user
+WHERE
+	id = #{id} AND date_format(ate_date, '%Y-%m-%d') = curdate()
+</select>
+
+<insert id="reserve">
+	INSERT INTO
+		reserve (res_id, res_name, res_tel, department, team)
+	VALUES
+		(#{res_id},#{res_name},#{res_tel},#{department},#{team})
+</insert>
+
+<!-- 
+<select id="selectTable" resultType="egovframework.jtLunch.main.reservation.DTO.ReserveTableDTO">
+SELECT
+	*
+FROM
+	reserve_table
+WHERE
+	no = #{time}
+</select>
+-->
+</mapper>

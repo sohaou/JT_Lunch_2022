@@ -1,0 +1,5 @@
+package egovframework.jtLunch.admin.owner.DAO;
+
+public class NoticeDAO {
+
+}

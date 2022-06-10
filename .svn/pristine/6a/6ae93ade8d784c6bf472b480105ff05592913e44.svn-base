@@ -1,0 +1,52 @@
+package egovframework.jtLunch.main.reservation.Controller;
+
+import javax.inject.Inject;
+
+import org.apache.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import egovframework.jtLunch.cmmn.security.DTO.CustomUserDetails;
+import egovframework.jtLunch.cmmn.security.Service.UserService;
+import egovframework.jtLunch.main.reservation.DTO.ReservationDTO;
+import egovframework.jtLunch.main.reservation.Service.ReservationService;
+
+@Controller
+public class ReservationController {
+	
+	Logger log = Logger.getLogger(getClass());
+	
+	@Inject
+	UserService userservice;
+	
+	@Inject
+	ReservationService reservationService;
+	
+	@RequestMapping(value="/user/reserve", method=RequestMethod.POST)
+	public String reserve(Authentication authentication, ReservationDTO reservationDTO) throws Exception{
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+		
+		String id = "";
+		if(principal != null) {
+			id = auth.getName();	
+		}
+		
+		CustomUserDetails dto = userservice.selectUser(id);
+		
+		String res_id = dto.getUser_id();
+		String res_name = dto.getUser_name();
+		
+		reservationDTO.setRes_id(res_id);
+		reservationDTO.setRes_name(res_name);
+		
+		log.debug("=======================" + reservationDTO + "======================");
+		reservationService.reserve(reservationDTO);
+		
+		return "redirect:/user/menuplanner";
+	}
+}

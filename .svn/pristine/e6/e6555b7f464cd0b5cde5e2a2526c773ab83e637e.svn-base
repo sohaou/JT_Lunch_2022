@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dashBoard">
+	<!-- 일별 식수 현황 그래프 출력 -->
+	<select id="getChartData" resultType="egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO">
+		SELECT
+			(
+			SELECT COUNT(*)
+			FROM ate_user
+			WHERE DATE_FORMAT(ate_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 0 )
+			) AS mon,
+			(
+			SELECT COUNT(*)
+			FROM ate_user
+			WHERE DATE_FORMAT(ate_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 1 )
+			) AS tue,
+			(
+			SELECT COUNT(*)
+			FROM ate_user
+			WHERE DATE_FORMAT(ate_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 2 )
+			) AS wen,
+			(
+			SELECT COUNT(*)
+			FROM ate_user
+			WHERE DATE_FORMAT(ate_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 3 )
+			) AS thu,
+			(
+			SELECT COUNT(*)
+			FROM ate_user
+			WHERE DATE_FORMAT(ate_date, '%Y-%m-%d') = ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 4 )
+			) AS fri		
+	</select>
+	<!-- 월별 식수 현황 그래프 출력 -->
+	<select id="getChartMonth" resultType="egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO">
+		SELECT
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 1
+			) AS jan,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 2
+			) AS feb,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 3
+			) AS mar,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 4
+			) AS apr,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 5
+			) AS may,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 6
+			) AS jun,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 7
+			) AS jul,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 8
+			) AS aug,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 9
+			) AS sep,
+			(
+			SELECT COUNT(*)
+			FROM ate_user 
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 10
+			) AS oct,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 11
+			) AS nov,
+			(
+			SELECT COUNT(*)
+			FROM ate_user  
+			WHERE YEAR(ate_date) = YEAR(CURDATE())
+			AND   MONTH(ate_date) = 12
+			) AS decem	
+	</select>
+	<!-- 월별 식수자 수  -->
+	<select id="getmonthAte" resultType="int">
+			SELECT 
+				COUNT(*)
+			FROM 
+				ate_user  
+			WHERE 
+				YEAR(ate_date) = YEAR(CURDATE())
+			AND MONTH(ate_date) = MONTH(CURDATE())	
+	</select>
+	<!-- 사용자 정보 출력 -->
+	<select id="searchUser" resultType="egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO">
+			SELECT 
+				department, team, user_name, user_tel, access_date, user_id
+			FROM 
+				jt_users  
+			WHERE 
+				user_auth = 'ROLE_USER'
+			ORDER BY department, team, user_name	
+	</select>
+	<!-- 식수자 출력 -->
+	<select id="printAteUser" resultType="egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO">
+			SELECT 
+				DATE_FORMAT(ate_date, '%Y-%m-%d') as ate_date, department, team, name, tel
+			FROM 
+				ate_user  
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+			ORDER BY ate_date		
+	</select>
+	<!-- 사용자 정보 삭제 -->
+	<delete id="deleteUser">
+			DELETE 
+			FROM 
+				jt_users
+			WHERE 
+				user_id=#{user_id}		
+	</delete>
+	<!-- 사용자 정보 등록 -->
+	<insert id="userInsert" parameterType="egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO">
+		INSERT INTO
+				jt_users (user_id, user_pw, user_name, user_tel, user_auth, enabled, access_date, join_date, department, team)
+		VALUES
+				(#{user_id}, '1234', #{user_name}, #{user_tel}, 'ROLE_USER', 1, NULL, now(), #{department}, #{team})		
+	</insert>
+	
+</mapper>

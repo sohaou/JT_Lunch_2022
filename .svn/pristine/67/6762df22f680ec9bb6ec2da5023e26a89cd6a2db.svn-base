@@ -1,0 +1,278 @@
+package egovframework.jtLunch.admin.owner.Controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import egovframework.jtLunch.admin.owner.DTO.MenuDTO;
+import egovframework.jtLunch.admin.owner.Service.MenuService;
+import egovframework.jtLunch.cmmn.PagingDTO;
+import egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO;
+import net.sf.json.JSONArray;
+
+@Controller
+public class OwnerController {
+	@Autowired
+	private MenuService menuService;
+	
+	//식당운영자 main
+	@GetMapping("/owner/main")
+	public String OwnerMain() {
+			
+		return "admin/adminMain";
+	}
+		
+	//식당운영자 메뉴등록폼
+	@GetMapping("/owner/menuInsert")
+	public String MenuInsert(HttpServletRequest re, Model model) throws Exception{
+		return "/admin/owner/menuInsert";
+		
+	}
+	//식당운영자 메뉴 등록 내용 저장
+	//@PostMapping("/owner/menuSave")
+	@RequestMapping(value="/owner/menuSave", method=RequestMethod.POST)
+	public String MenuSave(HttpServletRequest re, Model model) throws Exception{
+		String menuId=re.getParameter("menuId");
+		String type=re.getParameter("type");
+		String menuName=re.getParameter("menuName");
+		
+		MenuDTO vo=new MenuDTO();
+		if(type.equals("밥")) {
+			menuId="R-"+menuId;
+		} else if(type.equals("국")) {
+			menuId="S-"+menuId;
+		} else if(type.equals("반찬")) {
+			menuId="D-"+menuId;
+		}
+		
+		
+		try {
+			vo.setMenu_id(menuId);
+			vo.setMenu_type(type);
+			vo.setMenu_name(menuName);
+			
+			menuService.MenuInsert(vo);
+			System.out.println("등록완료");
+		} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		return "redirect:/owner/menuInsert";		
+	}
+	//식당운영자 _ 메뉴 목록 출력
+	@GetMapping("/owner/menuList")
+	public String printMenu(PagingDTO vo, HttpServletRequest re, Model model
+			, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception{
+		int total = menuService.countMenu();
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "5";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "5";
+		}
+		vo = new PagingDTO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		
+		//datatable 써서 페이징 할 필요가 굳이 없을거 같아서  뺄게요!
+		//try {
+			//model.addAttribute("paging", vo);
+			model.addAttribute("viewAll", menuService.printMenuAll());
+			//model.addAttribute("total", menuService.countMenu());
+		//} catch(Exception e){
+		//	System.out.println(e.getMessage());
+		//}
+		/*
+		model.addAttribute("paging", vo);
+		model.addAttribute("viewAll", menuService.printMenuAll(vo));
+		model.addAttribute("total", menuService.countMenu());
+		System.out.println(menuService.countMenu());
+		System.out.println(menuService.printMenuAll(vo)); */
+		return "admin/owner/menuList";
+	}
+	//식당운영자 _ 메뉴 검색
+	//검색내용 출력
+	@RequestMapping(value = "/owner/menuSearchList", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView menuSearchList(
+			@RequestParam("type") String type, 
+			@RequestParam("keyword") String keyword,
+			Model model)throws Exception {
+		ModelAndView mv = new ModelAndView("jsonView");
+		System.out.println("sss");
+		MenuDTO vo=new MenuDTO();
+		vo.setType(type);
+		vo.setKeyword(keyword);
+		System.out.println(menuService.selectSearchList(vo));
+		mv.addObject("result", menuService.selectSearchList(vo));
+		return mv;
+	}
+	//식당운영자 _ 수정할 메뉴 정보 가져오기
+	@RequestMapping(value = "/owner/menuUpdate", method = RequestMethod.GET)
+	public void updateForm(Locale locale, Model model,HttpServletRequest re) throws Exception {
+		String menu_id=re.getParameter("menu_id");
+		MenuDTO menu=menuService.getUpdateMenu(menu_id);
+
+		model.addAttribute("menu",menu);
+	}
+	//식당운영자 _ 메뉴 수정 저장
+	@RequestMapping(value = "/owner/updateSave", method = RequestMethod.POST)
+	public String updateSave(HttpServletRequest re, Model model) throws Exception {	
+		String menu_id=re.getParameter("menu_id");
+		String menu_name=re.getParameter("menuName");
+		
+		MenuDTO dto=new MenuDTO();
+		dto.setMenu_id(menu_id);
+		dto.setMenu_name(menu_name);
+		
+		menuService.UpdateMenu(dto);
+		
+		return "redirect:/owner/menuList"; 
+	}
+
+	//식당운영자 _ 메뉴 삭제
+	@GetMapping("/owner/menuDelete")
+	public String delete(HttpServletRequest re, Model model) throws Exception {
+		String menu_id=re.getParameter("menu_id");
+		menuService.DeleteMenu(menu_id);
+		return "redirect:/owner/menuList";
+	}
+	//식당운영자 _ 금일 식단표 등록
+	@GetMapping("/owner/menuPlanner")
+	public String menuPlanner(Model model) throws Exception{
+		List<?> category=null;
+		category=menuService.allMenu();
+		model.addAttribute("category", JSONArray.fromObject(category));
+		
+		return "admin/owner/menuPlanner";
+	}
+	//식당운영자 금일 식단표 저장
+	@RequestMapping(value="/owner/menuplanSave", method=RequestMethod.POST)
+	public String menuplanSave(HttpServletRequest re, Model model) throws Exception{
+		ArrayList<String> sidedish=new ArrayList<String> ();
+		
+		String rice=re.getParameter("rice");
+		String soup=re.getParameter("soup");
+		String sideDish=re.getParameter("sideDish");
+		//추가 반찬들 arraylist에 저장
+		sidedish.add(re.getParameter("sd1"));
+		sidedish.add(re.getParameter("sd2"));
+		sidedish.add(re.getParameter("sd3"));
+		sidedish.add(re.getParameter("sd4"));
+		sidedish.add(re.getParameter("sd5"));
+		sidedish.add(re.getParameter("sd6"));
+		sidedish.add(re.getParameter("sd7"));
+		sidedish.add(re.getParameter("sd8"));
+		sidedish.add(re.getParameter("sd9"));
+		
+		for(int i=0;i<sidedish.size();i++) {
+			if(!sidedish.get(i).equals("")) {
+				sideDish=sideDish+"/"+sidedish.get(i);
+			}
+		}
+		MenuPlannerDTO dto=new MenuPlannerDTO();
+		try {
+			dto.setSteamed_rice(rice);
+			dto.setSoup(soup);
+			dto.setSide_dish(sideDish);
+			
+			menuService.insertTodayMenu(dto);
+		} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return "admin/adminMain";
+	}
+	//식당운영자 _ 금일 식단표 확인
+	@RequestMapping(value = "/owner/todayMenuPlanner", method = RequestMethod.GET)
+	public String todayMenuPlanner(HttpServletRequest re, Model model) throws Exception {	
+		MenuPlannerDTO dto = menuService.todayMenuPlan();
+		int reserveCount=menuService.countReserve();
+		int ate_user=menuService.countAte_user();
+		
+		model.addAttribute("reserveCount", reserveCount);
+		model.addAttribute("ate_user", ate_user);
+		model.addAttribute("todayMenu", dto);
+		
+		return "admin/owner/todayMenuPlanner";
+	}
+	//식당운영자 _ 금일 식단표 수정 정보 불러오기
+	@GetMapping("/owner/menuPlannerModi")
+	public String menuPlanModi( Model model) throws Exception {
+		String[] sidedish = null;
+		MenuPlannerDTO dto = menuService.todayMenuPlan();
+		String side=dto.getSide_dish();
+		int reserveCount=menuService.countReserve();
+		int count=0;
+		for(int i=0;i<side.length();i++) {
+			sidedish=side.split("/");
+		}
+		
+		for(int i=0;i<sidedish.length;i++) {
+			if(sidedish[i]!=null) {
+				count++;
+			}
+		}
+		model.addAttribute("reserveCount", reserveCount);
+		model.addAttribute("count", count);
+		model.addAttribute("menuplanner", dto);
+		model.addAttribute("sidedish",JSONArray.fromObject(sidedish));
+		
+		List<?> category=null;
+		category=menuService.allMenu();
+		model.addAttribute("category", JSONArray.fromObject(category));
+		
+		return "admin/owner/menuPlannerModi";
+	}
+	//식당운영자 _ 금일 식단표 수정 저장
+	@RequestMapping(value = "/owner/menuPlanUpdateSave", method = RequestMethod.POST)
+	public String menuPlanUpdateSave(HttpServletRequest re, Model model) throws Exception {	
+		ArrayList<String> sidedish=new ArrayList<String> ();
+		
+		String today_date=re.getParameter("today_date");
+		String rice=re.getParameter("rice");
+		String soup=re.getParameter("soup");
+		String sideDish=re.getParameter("sideDish");
+		//추가 반찬들 arraylist에 저장
+		sidedish.add(re.getParameter("sd1"));
+		sidedish.add(re.getParameter("sd2"));
+		sidedish.add(re.getParameter("sd3"));
+		sidedish.add(re.getParameter("sd4"));
+		sidedish.add(re.getParameter("sd5"));
+		sidedish.add(re.getParameter("sd6"));
+		sidedish.add(re.getParameter("sd7"));
+		sidedish.add(re.getParameter("sd8"));
+		sidedish.add(re.getParameter("sd9"));
+		
+		for(int i=0;i<sidedish.size();i++) {
+			if(!sidedish.get(i).equals("")) {
+				sideDish=sideDish+"/"+sidedish.get(i);
+			}
+		}
+		MenuPlannerDTO dto=new MenuPlannerDTO();
+		try {
+			dto.setToday_date(today_date);
+			dto.setSteamed_rice(rice);
+			dto.setSoup(soup);
+			dto.setSide_dish(sideDish);
+			
+			menuService.UpdateMenuPlan(dto);
+		} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return "redirect:/owner/todayMenuPlanner";
+	}
+	
+}

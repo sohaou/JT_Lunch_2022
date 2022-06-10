@@ -1,0 +1,46 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+		<div id="layoutSidenav_nav">
+        	<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            	<div class="sb-sidenav-menu">
+                	<div class="nav">
+                    	<div class="sb-sidenav-menu-heading"></div>
+                        <a class="nav-link" href="/admin/main">
+                        	<div class="sb-nav-link-icon"><i class="fa fa-home"></i></div>
+                             DASHBOARD
+						</a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        	<div class="sb-nav-link-icon"><i class="fas fa-calculator"></i></div>
+                            	식수 관리
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        	<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            	<a class="nav-link" href="/admin/ateuserSearch">
+                                	기간별 식수 조회
+                                    <div class="sb-sidenav-collapse-arrow"></div>
+                                </a>
+                                <a class="nav-link" href="/admin/caculate">
+                                	기간별 정산
+                                    <div class="sb-sidenav-collapse-arrow"></div>
+                                </a>
+                            </nav>
+                        </div> 
+                        <br><br><br>
+                        <div class="sb-sidenav-menu-heading">BOARD</div>
+                        <a class="nav-link" href="/admin/notice">
+                        	<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            	공지사항	
+                        </a>
+                        <a class="nav-link" href="/admin/request">
+                        	<div class="sb-nav-link-icon"><i class="fa fa-bell"></i></div>
+                            	요청사항
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                	<div class="small">Logged in as:</div>
+                    Start Bootstrap 
+                </div>
+            </nav>
+        </div>

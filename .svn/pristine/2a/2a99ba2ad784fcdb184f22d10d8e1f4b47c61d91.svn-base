@@ -1,0 +1,41 @@
+	*{
+	  margin: 0px;
+	  padding: 0px;
+	  text-decoration: none;
+	  font-family:sans-serif;
+	
+	}
+
+    body {
+
+      background-color: black;
+    }
+    
+	@media (min-width: 992px) {
+		#canvas{
+		  position:absolute;
+		  width:40%;
+		  height:auto;
+		  padding: 30px, 20px;
+		  top:60%;
+		  left:50%;
+		  transform: translate(-50%,-50%);
+		  border-radius: 15px;
+		  overflow: hidden;
+		}
+	}
+
+    #loadingMessage {
+      text-align: center;
+      padding: 40px;
+      background-color: #eee;
+    }
+
+    #output div {
+      padding-bottom: 10px;
+      word-wrap: break-word;
+    }
+
+    #noQRFound {
+      text-align: center;
+    }

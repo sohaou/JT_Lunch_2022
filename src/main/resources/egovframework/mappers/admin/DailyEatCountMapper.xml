@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dailyEatCount">
+	<!-- 체인점별 식사자 수 정보 저장 -->
+	<insert id="InsertdailyEatCount" parameterType="egovframework.jtLunch.admin.cmmn.DTO.DailyEatCountDTO">
+		<![CDATA[
+			INSERT	INTO
+				daily_count_eat
+				(
+					FRANCHISE_ID,
+					EAT_DATE,
+					COUNT_EAT
+				) 
+			VALUES
+				(
+					#{FRANCHISE_ID},
+					#{EAT_DATE},
+					#{COUNT_EAT}
+				)
+		]]>
+	</insert>
+	<!-- 체인점별 전날 식사자 수 출력 -->
+	<select id="PrintDailyEatCount" resultType="egovframework.jtLunch.admin.cmmn.DTO.DailyEatCountDTO">
+		<![CDATA[
+			SELECT
+				d.FRANCHISE_ID,
+				d.EAT_DATE,
+				d.COUNT_EAT,
+				f.SHOP_NAME
+			FROM
+				daily_count_eat d
+			INNER JOIN
+				franchise f
+			ON
+				d.FRANCHISE_ID = f.ID
+			WHERE
+				d.EAT_DATE = #{eatDate}
+		]]>
+	</select>
+	<!-- 검색기간, 체인점별 식사자 수 검색-->
+	<select id="SearchDailyEatCount" parameterType="HashMap" resultType="egovframework.jtLunch.admin.cmmn.DTO.DailyEatCountDTO">
+		SELECT
+			EAT_DATE,
+			SUM(COUNT_EAT) as COUNT_EAT
+		FROM
+			daily_count_eat
+		WHERE 
+			DATE(EAT_DATE) BETWEEN #{startDate} AND #{endDate}
+		<if test='franchiseID != null and franchiseID != ""'>
+			AND FRANCHISE_ID = #{franchiseID}
+		</if>
+		GROUP BY EAT_DATE;
+	</select>
+</mapper>

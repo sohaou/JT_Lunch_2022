@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CheckAteUser">	
+	<!-- 금일 예약자 수 출력 -->
+	<select id="countReserve" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			reserve
+		WHERE 
+			res_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select> 
+	<!-- 캘린더(한달)동안의 식사자 수 출력 -->
+	<select id="countAteUser" resultType="int">
+			SELECT 
+				COUNT(*)  
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+	</select>
+	<!--캘린더(한달)동안의 식사자 출력 -->
+	<select id="AteUserList" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		SELECT 
+			id, 
+			name, 
+			ate_date, 
+			department, 
+			team, 
+			tel
+		FROM 
+			ate_user 
+		WHERE 
+			DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+		ORDER BY ate_date, name
+	</select>
+	<!-- 선택한 날짜의 식사자 출력 -->
+	<select id="DayAteUserAll" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		SELECT 
+			id, 
+			name, 
+			ate_date, 
+			department,
+			team, 
+			tel 
+		FROM 
+			ate_user 
+		WHERE 
+			ate_date LIKE CONCAT('%',#{ate_date},'%') 
+	</select>
+	<!-- 선택한 기간의 식사자 수 출력 -->
+	<select id="CountAteTerm" resultType="int">
+		SELECT 
+			COUNT(*)  
+		FROM 
+			ate_user 
+		WHERE 
+			DATE(ate_date) BETWEEN #{startDate} AND #{endDate}
+	</select>
+	<!-- 선택한 날짜의 식사자 수 출력 -->
+	<select id="CountAteTermTable" resultType="int">
+		SELECT 
+			COUNT(*)  
+		FROM 
+			ate_user 
+		WHERE 
+			ate_date LIKE CONCAT('%',#{ate_date},'%') 
+	</select>
+</mapper>
+

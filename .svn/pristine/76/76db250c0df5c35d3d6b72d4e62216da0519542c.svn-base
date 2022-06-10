@@ -1,0 +1,52 @@
+package egovframework.jtLunch.admin.owner.Controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import egovframework.jtLunch.admin.owner.Service.RequestService;
+
+@Controller
+public class OwnerBoardController {
+
+	@Autowired
+	private RequestService requestService;
+	
+	//식당운영자 공지사항 페이지
+	@GetMapping("/owner/notice")
+	public String OwnerNotice() {
+		
+		return "admin/owner/notice/ownerNotice";
+	}
+	
+	//식당운영자 _ 요청사항게시판이동
+		@GetMapping("/owner/request")
+		public String OwnerRequestPage(Model model) throws Exception {
+			try {
+				model.addAttribute("requestAll", requestService.printRequestAll());
+				System.out.println(requestService.printRequestAll());
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			return "admin/owner/notice/ownerRequest";
+		}
+		//식당운영자 _ 요청사항상세보기
+		@RequestMapping(value = "/owner/requestDetail", method = RequestMethod.GET)
+		public String requestDetail(HttpServletRequest re, Model model) throws Exception {
+			String req_id=re.getParameter("reqid");
+			
+			try {
+				model.addAttribute("requestDetail", requestService.selectRequest(req_id));
+				requestService.ownerCheck(req_id);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			
+			return "admin/owner/notice/ownerRequestDetail";
+		}
+}

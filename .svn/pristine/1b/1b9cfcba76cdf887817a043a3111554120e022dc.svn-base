@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userNotice">
+	<!-- 사용자 공지사항 출력 -->
+	<select id="UserNoticePrint" resultType="egovframework.jtLunch.main.notice.DTO.UserNoticeDTO">
+		SELECT 
+			notice_id, 
+			title, 
+			content, 
+			writer, 
+			DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as up_date, 
+			user_check, 
+			editor, 
+			DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as edit_time
+		FROM 
+			notice
+	</select>
+	<!-- 사용자 공지사항 상세보기 -->
+	<select id="UserNoticeDetail" resultType="egovframework.jtLunch.main.notice.DTO.UserNoticeDTO">
+		SELECT 
+			notice_id, 
+			title, 
+			content, 
+			writer, 
+			DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as up_date, 
+			user_check, 
+			editor, 
+			DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as edit_time
+		FROM 
+			notice
+		WHERE 
+			notice_id=#{notice_id}
+	</select>
+	<update id="ViewUpdate">
+		UPDATE
+			notice
+		SET
+			user_check = user_check +1
+		WHERE 
+			notice_id=#{notice_id}
+	</update>
+</mapper>
+

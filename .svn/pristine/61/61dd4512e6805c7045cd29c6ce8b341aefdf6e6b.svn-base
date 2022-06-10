@@ -1,0 +1,50 @@
+package egovframework.jtLunch.main.webPage.DTO;
+
+public class MenuplannerDTO {
+	private String steamed_rice;
+	private String soup;
+	private String side_dish;
+	/**
+	 * @return the steamed_rice
+	 */
+	public String getSteamed_rice() {
+		return steamed_rice;
+	}
+	/**
+	 * @param steamed_rice the steamed_rice to set
+	 */
+	public void setSteamed_rice(String steamed_rice) {
+		this.steamed_rice = steamed_rice;
+	}
+	/**
+	 * @return the soup
+	 */
+	public String getSoup() {
+		return soup;
+	}
+	/**
+	 * @param soup the soup to set
+	 */
+	public void setSoup(String soup) {
+		this.soup = soup;
+	}
+	/**
+	 * @return the side_dish
+	 */
+	public String getSide_dish() {
+		return side_dish;
+	}
+	/**
+	 * @param side_dish the side_dish to set
+	 */
+	
+	public void setSide_dish(String side_dish) {
+		this.side_dish = side_dish;
+	}
+	@Override
+	public String toString() {
+		return "menuVO [steamed_rice=" + steamed_rice + ", soup=" + soup + ", side_dish=" + side_dish + "]";
+	}
+	
+	
+}

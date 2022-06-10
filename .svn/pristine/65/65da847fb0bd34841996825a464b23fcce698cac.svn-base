@@ -1,0 +1,8 @@
+package egovframework.jtLunch.cmmn.join.Service;
+
+import egovframework.jtLunch.cmmn.security.DTO.CustomUserDetails;
+
+public interface JoinService {
+	
+	void register(CustomUserDetails customuserdetails);
+}

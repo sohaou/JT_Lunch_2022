@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CmmnRequest">
+	<!-- 요청사항출력 -->
+	<select id="printRequestAll" resultType="egovframework.jtLunch.admin.cmmn.DTO.CmmnRequestDTO">
+		SELECT 
+			req_id, 
+			req_title, 
+			req_content, 
+			req_writer, 
+			DATE_FORMAT(up_date, '%Y-%m-%d %H:%i:%s') as up_date, 
+			admin_check, 
+			owner_check, 
+			editor, 
+			edit_time
+		FROM
+			request
+		ORDER BY 
+			up_date
+	</select>
+	<!-- 요청사항 상세보기 -->
+	<select id="selectRequest" resultType="egovframework.jtLunch.admin.cmmn.DTO.CmmnRequestDTO">
+		SELECT 
+			req_id, 
+			req_title, 
+			req_content, 
+			req_writer, 
+			DATE_FORMAT(up_date, '%Y-%m-%d %H:%i:%s') as up_date, 
+			admin_check, 
+			owner_check, 
+			editor, 
+			edit_time
+		FROM
+			request
+		WHERE
+			req_id=#{req_id}
+	</select>
+	<!-- 식당운영자 요청사항 확인 표시 -->
+	<update id="ownerCheck">
+		UPDATE
+			request
+		SET
+			owner_check='1'
+		WHERE
+			req_id=#{req_id}
+	</update>
+	<!-- 관리자 요청사항 확인 표시 -->
+	<update id="adminCheck">
+		UPDATE
+			request
+		SET
+			admin_check='1'
+		WHERE
+			req_id=#{req_id}
+	</update>
+</mapper>
+

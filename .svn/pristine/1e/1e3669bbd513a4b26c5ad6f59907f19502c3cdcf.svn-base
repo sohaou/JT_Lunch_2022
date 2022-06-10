@@ -1,0 +1,78 @@
+package egovframework.jtLunch.admin.owner.Service.Impl;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import egovframework.jtLunch.admin.owner.DAO.MenuDAO;
+import egovframework.jtLunch.admin.owner.DTO.MenuDTO;
+import egovframework.jtLunch.admin.owner.Service.MenuService;
+import egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO;
+
+@Service("MenuService")
+public class MenuServiceImpl implements MenuService{
+	@Inject
+	private MenuDAO dao;
+	
+	@Override
+	public int MenuInsert(MenuDTO dto) throws Exception{ //메뉴 등록
+		return dao.MenuInsert(dto);
+	}
+	@Override
+	public int countMenu() throws Exception{//테이블에 저장된 총 메뉴 수
+		return dao.countMenu();
+	}
+	@Override
+	public List<?> printMenuAll() throws Exception{//테이블에 저장된 모든 메뉴 출력
+		return dao.printMenuAll();
+	}
+	@Override
+	public List<?> allMenu() throws Exception{ //DB 테이블에 저장된 모든 메뉴 출력(페이징X)
+		return dao.allMenu();
+	}
+	@Override
+	public MenuDTO getUpdateMenu(String menu_id) throws Exception{ //수정할 메뉴 정보 가져오기
+		return dao.getUpdateMenu(menu_id);
+	}
+	@Override
+	public int UpdateMenu(MenuDTO dto) throws Exception{ //메뉴 수정
+		return dao.UpdateMenu(dto);
+	}
+	@Override
+	public int DeleteMenu(String menu_id) throws Exception{ //메뉴 삭제
+		return dao.DeleteMenu(menu_id);
+	}
+	@Override
+	public List<?> selectSearchList(MenuDTO dto) throws Exception{ //메뉴 검색
+		return dao.selectSearchList(dto);
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public int insertTodayMenu(MenuPlannerDTO dto) throws Exception{//식당운영자 - 금일 식단 등록
+		return dao.insertTodayMenu(dto);
+	}
+	@Override
+	public MenuPlannerDTO todayMenuPlan() throws Exception{//식당 운영자 _ 금일 식단 출력
+		return dao.todayMenuPlan();
+	}
+	@Override
+	public int UpdateMenuPlan(MenuPlannerDTO dto) throws Exception{//식당 운영자 _ 금일 식단 수정
+		return dao.UpdateMenuPlan(dto);
+	}
+	
+	
+	@Override
+	public int countReserve() throws Exception{//식당 운영자 _ 금일 예약자 수 
+		return dao.countReserve();
+	}
+	@Override
+	public int countAte_user() throws Exception{//식당 운영자 _ 금일 실 식사자 출력
+		return dao.countAte_user();
+	}
+	@Override
+	public int checkMenu(String menu_name) throws Exception{//식당 운영자 _ 메뉴 등록(메뉴명 중복 확인)
+		return dao.checkMenu(menu_name);
+	}
+}

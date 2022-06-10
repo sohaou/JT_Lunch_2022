@@ -1,0 +1,40 @@
+package egovframework.jtLunch.admin.dashboard.Controller;
+
+import java.util.Calendar;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO;
+import egovframework.jtLunch.admin.dashboard.Service.DashBoardService;
+import egovframework.jtLunch.admin.dashboard.Util.WeekDayUtil;
+
+@Controller
+public class DashBoardController {
+	
+	@Resource(name="dashBoardService")
+	private DashBoardService dashBoardService;
+
+	//관리자 main
+	@GetMapping("/admin/main")
+	public String DashBoardPage(Model model) throws Exception{
+		
+		Calendar cal = Calendar.getInstance();
+		
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) +1;
+		int date = cal.get(Calendar.DATE);
+		
+		DashBoardDTO dashboardDTO = dashBoardService.getChartData();
+		
+		model.addAttribute("weekCnt", WeekDayUtil.getCurrentWeekOfMonth(year,month,date));
+		model.addAttribute("chartData", dashboardDTO);
+		System.out.println(dashboardDTO.getMon());
+		System.out.println(dashboardDTO.getTue());
+		System.out.println(dashboardDTO.getWen());
+		return "admin/adminMain";
+	}
+}

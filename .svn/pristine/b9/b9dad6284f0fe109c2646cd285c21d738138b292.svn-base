@@ -1,0 +1,8 @@
+package egovframework.jtLunch.admin.dashboard.Service;
+
+import egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO;
+
+public interface DashBoardService {
+
+	public DashBoardDTO getChartData() throws Exception; 
+}

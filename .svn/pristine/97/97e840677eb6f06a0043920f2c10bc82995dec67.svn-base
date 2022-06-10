@@ -1,0 +1,16 @@
+package egovframework.jtLunch.admin.dashboard.Controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class DashBoardController {
+
+	//관리자 main
+	@GetMapping("/admin/main")
+	public String DashBoardPage() {
+		
+		return "admin/adminMain";
+	}
+	
+}

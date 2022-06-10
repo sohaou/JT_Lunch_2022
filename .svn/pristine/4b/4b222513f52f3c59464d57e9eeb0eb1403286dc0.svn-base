@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserve">
+
+<!-- 같이 먹을 리스트에 추가하기 위해 체크된 id 조회 -->
+<select id="selectMember" resultType="egovframework.jtLunch.cmmn.security.DTO.CustomUserDetails">
+SELECT
+	*
+FROM
+	jt_users
+WHERE
+	user_id = #{id}
+</select>
+
+<!-- 금일 식사 예약한 인원 조회 -->
+<select id="selectUser" resultType="egovframework.jtLunch.main.reservation.DTO.ReservationDTO">
+SELECT 
+	res_id, res_name, res_tel, department, team, date_format(now(), '%Y-%m-%d') as res_date
+FROM
+	reserve
+WHERE
+	res_id = #{id} AND date_format(res_date, '%Y-%m-%d') = curdate()
+</select>
+
+<!--  식수 확인한 인원 조회 -->
+<select id="selectQrUser" resultType="egovframework.jtLunch.main.reservation.DTO.ReservationQRDTO">
+SELECT 
+	id, date_format(now(), '%Y-%m-%d') as ate_date
+FROM
+	ate_user
+WHERE
+	id = #{id} AND date_format(ate_date, '%Y-%m-%d') = curdate()
+</select>
+
+<!-- 예약 -->
+<insert id="reserve">
+	INSERT INTO
+		reserve (res_id, 
+				 res_name, 
+				 res_tel, 
+				 department, 
+				 team)
+	VALUES
+		(#{res_id},
+		 #{res_name},
+		 #{res_tel},
+		 #{department},
+		 #{team})
+</insert>
+
+<!--   예약 가능한 테이블 카운트 조회 --> 
+<select id="selectTable" resultType="map">
+SELECT
+	*
+FROM
+	reserve_table
+WHERE
+	no = #{time}
+</select>
+ 
+<!-- 테이블 카운트 update -->
+
+<update id="updateTableCount" parameterType="map">
+UPDATE
+	reserve_table
+SET
+	count = (#{count}-1)
+WHERE
+	no = #{no}
+</update>
+
+<!-- 같이 먹을 인원 리스트에 추가 -->
+<select id="addMember" resultType="map">
+SELECT
+	*
+FROM
+	jt_users
+WHERE
+	user_id = #{user_id}
+</select>
+
+<!-- 사용자 전체 출력 -->
+<select id="memberAllPrint" resultType="egovframework.jtLunch.cmmn.security.DTO.CustomUserDetails">
+SELECT
+	*
+FROM
+	jt_users
+WHERE
+	user_auth = "ROLE_USER"
+</select>
+</mapper>

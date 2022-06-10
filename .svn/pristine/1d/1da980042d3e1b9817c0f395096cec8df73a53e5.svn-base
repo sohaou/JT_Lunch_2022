@@ -1,0 +1,90 @@
+package egovframework.jtLunch.admin.dashboard.Controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import egovframework.jtLunch.admin.owner.DTO.MenuDTO;
+import egovframework.jtLunch.admin.owner.Service.MenuService;
+import egovframework.jtLunch.cmmn.PagingDTO;
+
+@Controller
+public class DashBoardController {
+	@Autowired
+	private MenuService menuService;
+	//관리자 main
+	@GetMapping("/admin/main")
+	public String DashBoardPage() {
+		
+		return "admin/adminMain";
+	}
+	
+	//식당운영자 메뉴등록폼
+	@GetMapping("/owner/menuInsert")
+	public String MenuInsert(HttpServletRequest re, Model model) throws Exception{
+		return "/admin/owner/menuInsert";
+		
+	}
+	//식당운영자 메뉴 등록 내용 저장
+	//@PostMapping("/owner/menuSave")
+	@RequestMapping(value="/owner/menuSave", method=RequestMethod.POST)
+	public String MenuSave(HttpServletRequest re, Model model) throws Exception{
+		String menuId=re.getParameter("menuId");
+		String type=re.getParameter("type");
+		String menuName=re.getParameter("menuName");
+		
+		MenuDTO vo=new MenuDTO();
+		if(type.equals("밥")) {
+			menuId="R-"+menuId;
+		} else if(type.equals("국")) {
+			menuId="S-"+menuId;
+		} else if(type.equals("반찬")) {
+			menuId="D-"+menuId;
+		}
+		
+		
+		try {
+			System.out.println(menuId);
+			System.out.println(type);
+			System.out.println(menuName);
+			vo.setMenuId(menuId);
+			vo.setMenuType(type);
+			vo.setMenuName(menuName);
+			
+			menuService.MenuInsert(vo);
+			System.out.println("등록완료");
+		} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		return "redirect:/owner/menuInsert";		
+	}
+	//식당운영자 _ 메뉴 목록 출력
+	@GetMapping("/owner/menuList")
+	public String printMenu(PagingDTO vo, HttpServletRequest re, Model model
+			, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception{
+		int total = menuService.countMenu();
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "5";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "5";
+		}
+		vo = new PagingDTO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		model.addAttribute("paging", vo);
+		model.addAttribute("viewAll", menuService.printMenuAll(vo));
+		model.addAttribute("total", menuService.countMenu());
+		//
+		return "/admin/owner/menuList";
+	}
+	//식당운영자 _ 금일 식단표 등록
+}

@@ -1,0 +1,22 @@
+package egovframework.jtLunch.admin.dashboard.Service.impl;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import egovframework.jtLunch.admin.dashboard.DAO.DashBoardDAO;
+import egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO;
+import egovframework.jtLunch.admin.dashboard.Service.DashBoardService;
+
+@Service("dashBoardService")
+public class DashBoardServiceImpl implements DashBoardService{
+	
+	@Resource(name="dashBoardDAO")
+	private DashBoardDAO dashBoardDAO;
+	
+	@Override
+	public DashBoardDTO getChartData() throws Exception{
+		return dashBoardDAO.getChartData();
+	}
+
+}

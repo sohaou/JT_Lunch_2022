@@ -1,0 +1,25 @@
+package egovframework.jtLunch.main.qrcode.Service.Impl;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import egovframework.jtLunch.main.qrcode.DAO.QrCodeDAO;
+import egovframework.jtLunch.main.qrcode.Service.QrCodeService;
+@Service("qrcodeService")
+public class QrCodeServiceImpl implements QrCodeService{
+	@Inject
+	private QrCodeDAO qrcodeDAO;
+	
+	@Override
+	public int updateRes(String id) {
+		return qrcodeDAO.updateRes(id);
+	}
+	
+	@Override
+	public int insertRes(String id) {
+		return qrcodeDAO.insertRes(id);
+	}
+
+
+}

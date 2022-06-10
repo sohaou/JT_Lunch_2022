@@ -1,0 +1,59 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>식당 운영자 _ 식단 등록</title>
+<%@ include file="/WEB-INF/layout/adminHeader.jsp" %>
+	<%
+	Date nowTime = new Date();
+	SimpleDateFormat today = new SimpleDateFormat("yyyy년 MM월 dd일");
+	%>
+</head>
+<body>
+	<div id="layoutSidenav_content">
+	<main>
+		<div class="container">
+		<div class="row">
+		<div class="col-sm-12 text-center" >
+		<div class="col-sm-3"></div>     
+		<div class="col-sm-6">
+		<h2>식단 등록</h2><br>	
+		<div id="menuplus">
+			<table class="table table-boardered">
+			<form role="form" method="post" autocomplete="off">
+			</form>
+				<tr><td>
+					<select name="type" class="form-control">
+						<option value="">-----분류-----</option>
+						<option value="rice">밥</option>
+						<option value="soup">국</option>
+						<option value="sdish">반찬</option>
+						<option value="etc">별미</option>
+					</select>
+				</td></tr>
+				<tr><td>
+					<select name="type" class="form-control">
+						<option value="">-----메뉴명-----</option>
+						<option value="rice">밥</option>
+						<option value="soup">국</option>
+						<option value="sdish">반찬</option>
+						<option value="etc">별미</option>
+					</select>
+				</td></tr>
+			</table>
+		</div>
+		</div>
+		</div>
+		</div>
+		</div>
+	</main>
+	<%@ include file="/WEB-INF/layout/adminFooter.jsp" %>
+	</div>
+</body>
+</html>

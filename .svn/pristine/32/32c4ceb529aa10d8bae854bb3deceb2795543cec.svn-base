@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="menu">
+<!-- 메뉴 이름 중복 확인 -->
+	<select id="checkMenu" resultType="int">
+		SELECT COUNT(*) 
+		FROM menulist 
+		WHERE menu_name=#{menu_id}
+	</select>
+	<!-- 메뉴 테이블에 메뉴 저장 -->
+	<insert id="MenuInsert">
+		INSERT INTO 
+			menulist(menu_id,menu_type,menu_name)
+		VALUES
+			(#{menu_id},#{menu_type},#{menu_name})	
+	</insert>
+	<!-- DB 메뉴 저장된 메뉴 총 개수 출력 -->
+	<select id="countMenu" resultType="int">
+		SELECT COUNT(*) FROM menulist
+	</select>
+	<!-- DB 메뉴 저장된 모든 메뉴 출력 (페이징) -->
+	<select id="printMenuAll" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO"> <!-- data를 받아오기 위한 resultType -->
+		SELECT 
+			*
+		FROM 
+			menulist
+		WHERE 
+			1=1
+		ORDER BY 
+			menu_type, menu_name
+		<!-- LIMIT #{start},5  -->
+	</select>
+	<!-- DB 메뉴 저장된 모든 메뉴 출력 (페이징x) -->
+	<select id="allMenu" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuDTO" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO"> <!-- data를 받아오기 위한 resultType -->
+		SELECT 
+			*
+		FROM 
+			menulist
+	</select>
+	<!-- 메뉴 삭제 -->
+	<delete id="DeleteMenu">
+		DELETE
+		FROM 
+			menulist
+		WHERE 
+			menu_id=#{menu_id}
+	</delete>
+	<!-- 메뉴 수정 -->
+	<update id="UpdateMenu" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		UPDATE 
+			menulist
+		SET 
+			menu_name=#{menu_name}
+		WHERE 
+			menu_id=#{menu_id}
+	</update>
+	<!-- 수정할 메뉴 정보 가져오기 -->
+	<select id="getUpdateMenu" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			*
+		FROM 
+			menulist
+		WHERE
+			menu_id=#{menu_id}
+	</select>
+	<!-- 메뉴 검색 -->
+	<select resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO" id="selectSearchList" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			*
+		FROM 
+			menulist
+		WHERE
+			1=1
+		<choose>
+			<when test="type != null and type.equals('menu_type')">AND menu_type LIKE CONCAT('%',#{keyword},'%') </when>			
+			<when test="type != null and type.equals('menu_name')">AND menu_name LIKE CONCAT('%',#{keyword},'%') </when>			
+		</choose>
+	</select>
+	<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	<!-- 오늘 식단  -->
+	<select id="todayMenuPlan" parameterType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO" resultType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO">
+		SELECT 
+			today_date, steamed_rice, soup, side_dish
+		FROM
+			menuplanner
+		WHERE 
+			today_date = date_format(NOW(),'%Y-%m-%d')
+	</select>
+	<!-- 식당 운영자 _ 식단 등록 -->
+	<insert id="insertTodayMenu">
+		INSERT INTO
+			menuplanner(today_date, steamed_rice, soup, side_dish)
+		VALUES 
+			(#{today_date},#{steamed_rice},#{soup},#{side_dish})
+	</insert>
+	<!-- 식당 운영자 _ 식단 수정 -->
+	<update id="UpdateMenuPlan">
+		UPDATE
+			menuplanner
+		SET
+			steamed_rice=#{steamed_rice},soup=#{soup},side_dish=#{side_dish}
+		WHERE
+			today_date = #{today_date}			
+	</update>
+	<!-- 금일 예약자 수 출력 -->
+	<select id="countReserve" resultType="int">
+		SELECT COUNT(*) FROM reserve
+		WHERE res_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select> 
+	<!-- 금일 실 식사자 수 출력 -->
+	<select id="countAte_user" resultType="int">
+		SELECT COUNT(*) FROM ate_user
+		WHERE ate_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select>
+	<!-- 일별 식단 출력 -->
+	<select id="selectDayMenuPlan" resultType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO">
+		<![CDATA[
+			SELECT 
+				*
+			FROM 
+				menuplanner 
+			WHERE 
+				DATE(today_date) BETWEEN #{db_startDate} AND #{db_endDate}
+		]]>
+	</select>
+	<!-- 선택한 날짜 메뉴 출력 -->
+	<select id="SelectDateMenuPlan" parameterType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO" resultType="egovframework.jtLunch.main.menuplanner.DTO.MenuPlannerDTO">
+		SELECT 
+			*
+		FROM
+			menuplanner
+		WHERE 
+			today_date = #{select_date}
+	</select>
+	<!-- 선택한 날짜에 식단의 존재 유무 확인 -->
+	<select id="checkMenuIn" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM
+			menuplanner
+		WHERE 
+			today_date = #{select_date}
+	</select>
+	<!-- 좋아요 수 상위 10개의 메뉴 출력 -->
+	<select id="selectLikeCount10" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			*
+		FROM
+			menulist
+		ORDER BY 
+			like_count 
+		DESC 
+			limit 10;
+	</select>
+</mapper>
+

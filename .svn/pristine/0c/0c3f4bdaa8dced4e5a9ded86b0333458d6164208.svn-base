@@ -1,0 +1,50 @@
+package egovframework.jtLunch.admin.owner.Service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import egovframework.jtLunch.admin.owner.DAO.MenuDAO;
+import egovframework.jtLunch.admin.owner.DTO.MenuDTO;
+import egovframework.jtLunch.cmmn.PagingDTO;
+
+@Service("MenuService")
+public class MenuServiceImpl implements MenuService{
+	@Inject
+	private MenuDAO dao;
+	
+	@Override
+	public int MenuInsert(MenuDTO dto) throws Exception{ //메뉴 등록
+		return dao.MenuInsert(dto);
+	}
+	@Override
+	public int countMenu() throws Exception{//테이블에 저장된 총 메뉴 수
+		return dao.countMenu();
+	}
+	@Override
+	public List<?> printMenuAll() throws Exception{//테이블에 저장된 모든 메뉴 출력
+		return dao.printMenuAll();
+	}
+	@Override
+	public List<?> allMenu() throws Exception{ //DB 테이블에 저장된 모든 메뉴 출력(페이징X)
+		return dao.allMenu();
+	}
+	@Override
+	public MenuDTO getUpdateMenu(String menu_id) throws Exception{ //수정할 메뉴 정보 가져오기
+		return dao.getUpdateMenu(menu_id);
+	}
+	@Override
+	public int UpdateMenu(MenuDTO dto) throws Exception{ //메뉴 수정
+		return dao.UpdateMenu(dto);
+	}
+	@Override
+	public int DeleteMenu(String menu_id) throws Exception{ //메뉴 삭제
+		return dao.DeleteMenu(menu_id);
+	}
+	@Override
+	public List<?> selectSearchList(MenuDTO dto) throws Exception{ //메뉴 검색
+		return dao.selectSearchList(dto);
+	}
+}

@@ -1,0 +1,5 @@
+package egovframework.jtLunch.admin.cmmn.Controller;
+
+public class CmmnRequestController {
+
+}

@@ -1,0 +1,9 @@
+package egovframework.jtLunch.main.login.Service;
+
+import egovframework.jtLunch.main.login.DTO.MenuplannerDTO;
+
+public interface MenuplannerService {
+	
+	public MenuplannerDTO selectmenu(MenuplannerDTO menuplannervo);
+	
+}

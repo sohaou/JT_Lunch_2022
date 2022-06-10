@@ -1,0 +1,11 @@
+package egovframework.jtLunch.admin.owner.Service;
+
+import java.util.List;
+
+import egovframework.jtLunch.admin.owner.DTO.DateData;
+import egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO;
+
+public interface CheckAteUserService {
+	public int countAteUser(QrCodeDTO dto) throws Exception;
+	public List<?> ateuser_list(DateData dateData) throws Exception;
+}

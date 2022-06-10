@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+    .time_obj input[type="radio"] {
+        display: none;
+    }
+ 
+    .time_obj input[type="radio"] + span {
+        display: inline-block;
+        padding: 15px 1px;
+        border: 1px solid #dfdfdf;
+        background-color: #ffffff;
+        text-align: center;
+        cursor: pointer;
+    }
+ 
+    .time_obj input[type="radio"]:checked + span {
+        background-color: #113a6b;
+        color: #ffffff;
+    }
+    
+    .time_obj_disabled input[type="radio"] {
+        display: none;
+    }
+ 
+    .time_obj_disabled input[type="radio"] + span {
+        display: inline-block;
+        padding: 15px 1px;
+        border: 1px solid #dfdfdf;
+        background-color: gray;
+        text-align: center;
+        cursor: pointer;
+    }

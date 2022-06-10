@@ -1,0 +1,21 @@
+package egovframework.jtLunch.cmmn.security.Controller;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import egovframework.jtLunch.cmmn.security.Service.UserService;
+
+@Controller
+public class LoginController {
+	
+	@Inject
+	UserService service;
+	
+	@RequestMapping(value="/loginform")
+	public String mainPage() {
+		return "/main/login/index";
+	}
+	
+}

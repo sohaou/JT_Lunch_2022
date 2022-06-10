@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<update id="qrupdate">
+			
+			UPDATE
+				reserve
+			SET
+				res_check=1
+			WHERE 
+				res_id=#{id}
+		
+	</update>
+	
+	<insert id="ateinsert">
+	
+			INSERT INTO
+				ate_user (id, name, ate_date)
+			SELECT
+				res_id, res_name, res_date
+			FROM 
+				reserve
+			WHERE 
+				res_id=#{id}
+		
+	</insert>
+
+</mapper>
+

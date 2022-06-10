@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="menu">
+	<!-- 메뉴 테이블에 메뉴 저장 -->
+	<insert id="MenuInsert">
+		insert into menulist(menu_id,menu_type,menu_name) values(#{menuId},#{menuType},#{menuName})	
+	</insert>
+	<!-- DB 메뉴 저장된 메뉴 총 개수 출력 -->
+	<select id="countMenu" resultType="int">
+		SELECT COUNT(*) FROM menulist
+	</select>
+	<!-- DB 메뉴 저장된 메뉴 총 개수 출력 -->
+	<select id="printMenuAll" resultType="egovframework.jtLunch.admin.dashboard.DTO.MenuDTO"> <!-- data를 받아오기 위한 resultType -->
+		SELECT *
+		FROM menulist
+		WHERE 1=1
+		ORDER BY menu_name
+		LIMIT #{start}, 10
+	</select>
+</mapper>
+

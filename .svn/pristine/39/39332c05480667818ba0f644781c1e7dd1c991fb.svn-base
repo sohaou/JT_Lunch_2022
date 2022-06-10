@@ -1,0 +1,13 @@
+package egovframework.jtLunch.main.notice.Service;
+
+import java.util.List;
+
+import egovframework.jtLunch.cmmn.PagingDTO;
+import egovframework.jtLunch.main.notice.DTO.NoticeDTO;
+
+public interface NoticeService {
+	public List<NoticeDTO> print(PagingDTO dto) throws Exception;
+	
+	public int count() throws Exception;
+}
+

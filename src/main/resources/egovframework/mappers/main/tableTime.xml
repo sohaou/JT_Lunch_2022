@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tableTime">
+<!--  예약 가능한 테이블 카운트 조회 -->
+<select id="firstTime" resultType="egovframework.jtLunch.main.reservation.DTO.ReserveTableDTO">
+SELECT
+	count
+FROM
+	reserve_table
+WHERE
+	no = 1
+</select>
+
+<select id="secondTime" resultType="egovframework.jtLunch.main.reservation.DTO.ReserveTableDTO">
+SELECT
+	count
+FROM
+	reserve_table
+WHERE
+	no = 2
+</select>
+
+<select id="thirdTime" resultType="egovframework.jtLunch.main.reservation.DTO.ReserveTableDTO">
+SELECT
+	count
+FROM
+	reserve_table
+WHERE
+	no = 3
+</select>
+
+<select id="fourthTime" resultType="egovframework.jtLunch.main.reservation.DTO.ReserveTableDTO">
+SELECT
+	count
+FROM
+	reserve_table
+WHERE
+	no = 4
+</select>
+
+</mapper>

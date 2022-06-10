@@ -1,0 +1,164 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  font-family:sans-serif;
+
+}
+
+body {
+  background-image: #34495e;
+}
+
+.loginForm {
+  position:absolute;
+  width:90%;
+  height:auto;
+  padding: 30px, 20px;
+  background-color:#FFFFFF;
+  text-align:center;
+  top:60%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  border-radius: 15px;
+}
+
+.joinForm {
+  position:absolute;
+  width:90%;
+  height:auto;
+  background-color:#FFFFFF;
+  text-align:center;
+  padding: 30px, 20px;
+  margin-top:30px;
+  top:60%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  border-radius: 15px;
+}
+
+@media (min-width: 1000px) {
+	.loginForm {
+	  position:absolute;
+	  width:60%;
+	  height:auto;
+	  padding: 30px, 20px;
+	  background-color:#FFFFFF;
+	  text-align:center;
+	  top:60%;
+	  left:50%;
+	  transform: translate(-50%,-50%);
+	  border-radius: 15px;
+	}
+}
+
+@media (min-width: 1000px) {
+	.joinForm {
+	  position:absolute;
+	  width:60%;
+	  height:auto;
+	  padding: 30px, 20px;
+	  background-color:#FFFFFF;
+	  text-align:center;
+	  top:60%;
+	  left:50%;
+	  transform: translate(-50%,-50%);
+	  border-radius: 15px;
+	}
+}
+
+.loginForm h2{
+	text-align: center;
+	margin: 30px;
+}
+
+.joinForm h2{
+	text-align: center;
+  	margin: 30px;
+}
+
+.idForm{
+  border-bottom: 2px solid #adadad;
+  margin: 30px;
+  padding: 10px 10px;
+}
+
+.passForm{
+  border-bottom: 2px solid #adadad;
+  margin: 30px;
+  padding: 10px 10px;
+}
+
+.id {
+  width: 100%;
+  border:none;
+  outline:none;
+  color: #636e72;
+  font-size:16px;
+  height:25px;
+  background: none;
+}
+
+.pw {
+  width: 100%;
+  border:none;
+  outline:none;
+  color: #636e72;
+  font-size:16px;
+  height:25px;
+  background: none;
+}
+
+.btn {
+  position:relative;
+  left:30%;
+  transform: translateX(-50%);
+  margin-bottom: 40px;
+  width:60%;
+  height:40px;
+  
+  background-position: left;
+  background-size: 200%;
+  color:white;
+  font-weight: bold;
+  border:none;
+  cursor:pointer;
+  transition: 0.4s;
+  display:inline;
+}
+
+.btn2 {
+  position:relative;
+  left:30%;
+  transform: translateX(-50%);
+  margin-top: 20px;
+  margin-bottom: 40px;
+  width:60%;
+  height:40px;
+  
+  background-position: left;
+  background-size: 200%;
+  color:white;
+  font-weight: bold;
+  border:none;
+  cursor:pointer;
+  transition: 0.4s;
+  display:inline;
+}
+
+.signUp {
+	background: linear-gradient(125deg,#ec81c6,#e76f5c,#ec81c6);
+}
+
+
+.signIn {
+	background: linear-gradient(125deg,#81ecec,#6c5ce7,#81ecec);
+}
+
+.btn:hover {
+  background-position: right;
+}
+
+.bottomText {
+  text-align: center;
+}

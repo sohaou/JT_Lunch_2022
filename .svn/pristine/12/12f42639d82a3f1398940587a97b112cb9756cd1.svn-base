@@ -1,0 +1,25 @@
+package egovframework.jtLunch.main.login.Controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+/**
+
+ * @Method Name : LoginController
+
+ * @작성일 : 2021. 10. 12
+
+ * @Method 설명 : 메인쪽 페이지 불러오는 곳
+
+ */
+
+@Controller
+public class LoginController {
+	
+	@GetMapping("/")
+	public String mainPage() {
+		return "/main/login/index";
+	}
+}
+
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="menuPlan">
+	<!-- 오늘 식단  -->
+	<select id="todayMenuPlan" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuPlanDTO" resultType="egovframework.jtLunch.admin.owner.DTO.MenuPlanDTO">
+		SELECT 
+			today_date, 
+			steamed_rice, 
+			soup, 
+			side_dish
+		FROM
+			menuplanner
+		WHERE 
+			today_date = date_format(NOW(),'%Y-%m-%d')
+	</select>
+	<!-- 식당 운영자 _ 식단 등록 -->
+	<insert id="insertTodayMenu">
+		INSERT INTO menuplanner
+			(
+				today_date, 
+				steamed_rice, 
+				soup, 
+				side_dish
+			)
+		VALUES 
+			(
+				#{today_date},
+				#{steamed_rice},
+				#{soup},
+				#{side_dish}
+			)
+	</insert>
+	<!-- 식당 운영자 _ 식단 수정 -->
+	<update id="UpdateMenuPlan">
+		UPDATE
+			menuplanner
+		SET
+			steamed_rice=#{steamed_rice},
+			soup=#{soup},
+			side_dish=#{side_dish}
+		WHERE
+			today_date = #{today_date}			
+	</update>
+	<!-- 금일 예약자 수 출력 -->
+	<select id="countReserve" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			reserve
+		WHERE 
+			res_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select> 
+	<!-- 금일 실 식사자 수 출력 -->
+	<select id="countAte_user" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			ate_user
+		WHERE 
+			ate_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select>
+	<!-- 일별 식단 출력 (달력에서 한달) -->
+	<select id="selectDayMenuPlan" resultType="egovframework.jtLunch.admin.owner.DTO.MenuPlanDTO">
+		SELECT 
+			today_date, steamed_rice, soup, side_dish
+		FROM 
+			menuplanner 
+		WHERE 
+			DATE(today_date) BETWEEN #{db_startDate} AND #{db_endDate}
+	</select>
+	<!-- 선택한 날짜 메뉴 출력 -->
+	<select id="SelectDateMenuPlan" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuPlanDTO" resultType="egovframework.jtLunch.admin.owner.DTO.MenuPlanDTO">
+		SELECT 
+			today_date, steamed_rice, soup, side_dish
+		FROM
+			menuplanner
+		WHERE 
+			today_date = #{select_date}
+	</select>
+	<!-- 선택한 날짜에 식단의 존재 유무 확인 -->
+	<select id="checkMenuIn" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM
+			menuplanner
+		WHERE 
+			today_date = #{select_date}
+	</select>
+</mapper>
+

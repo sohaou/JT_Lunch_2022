@@ -1,0 +1,32 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/layout/ownerHeader.jspf" %>
+<main>
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">메뉴 수정</h1>
+			<ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item">식당운영자</li>
+            	<li class="breadcrumb-item active">메뉴수정</li>
+			</ol>
+		<form method="post" action="/owner/updateSave?menu_id=${menu.menu_id }">
+		<table>
+			<tr>
+				<td><input type="hidden" name="id" value="${menu.menu_id }"/></td>
+			</tr>
+			<tr>
+				<td>분류 : </td>
+				<td>${menu.menu_type }</td>
+			</tr>
+			<tr>
+				<td>메뉴명 : </td>
+				<td><input type="text" name="menuName" value="${menu.menu_name }"/></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></td>
+				<td><input type="submit" value="수정"/>&nbsp;&nbsp;&nbsp;<input type="button" value="닫기" onclick="location.href='/owner/main'"/></td>
+			</tr>
+		</table>
+	</form>
+	</div>
+</main>
+<%@ include file="/WEB-INF/layout/adminFooter.jspf" %>

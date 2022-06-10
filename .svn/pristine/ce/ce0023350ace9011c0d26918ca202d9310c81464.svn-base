@@ -1,0 +1,114 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/layout/adminHeader.jspf" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).on("click","#searchBtn",function() {		
+	console.log("start");
+			
+		$.ajax({
+			    url : "/menuSearchList",
+			    dataType: "json",
+			    type: "POST",
+			    data : $(this).closest(".searchForm").serialize(),
+			    success : function(result){
+					//테이블 초기화
+					$('#searchResult').empty();
+					if(result.length>=1){
+						result.forEach(function(item){
+							str = "<tr>"
+							str += "<td class='table-center'>" + item.menu_type + "</td>";
+							str += "<td class='table-center'>" + item.menu_name + "</td>";
+							str += "<td class='table-center'>" + item.like_count + "</td>";
+							str += "<td class='table-center'><a href='/admin/owner/menuUpdate?menu_id=" + item.menu_id + "'><button id='modiButton'>수정</button></a></td>";
+							str += "<td class='table-center'><a href='/owner/menuDelete?menu_id=" + item.menu_id + "'><button id='delButton'>삭제</button></a></td>";
+							str += "</tr>"
+							$('#searchResult').append(str);
+		        		})				 
+					}
+				},
+			    error: function (error)
+			    {
+			    	alert("검색실패"+error);
+			    	console.log(error);
+				}
+		});
+		
+	});//findbyaddrBt	
+	
+
+</script>
+
+<style>
+	.table-center {text-align: center !important; white-space : nowrap; text-overflow: ellipsis;}
+	.table-center > a {text-align: center; white-space : nowrap; text-overflow: ellipsis;}
+	.searchForm .dataTable-selector {width : 49%; display: inline-block; padding-right: 0.5rem;}
+	.searchForm .dataTable-input {width : 49%; display: inline-block; float: right;}
+	/* .searchForm #searchBtn {white-space : nowrap; text-overflow: ellipsis;} */
+	
+</style>
+	<main>
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">메뉴 목록</h1>
+			<ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item">식당운영자</li>
+            	<li class="breadcrumb-item active">메뉴목록</li>
+			</ol>
+			
+			 <div class="card mb-4" id="search" style="border: none;">
+				<form name="searchForm" class="searchForm" id="searchForm">
+					<select class="dataTable-selector" name="type" id="type">
+						<option value="all">선택</option>
+						<option value="menu_type">분류</option>
+						<option value="menu_name">메뉴명</option>
+					</select>
+					<input class="dataTable-input" type="text" name="keyword" id="keyword" autocomplete="off" style="float: right;"/>
+					<div class="mt-4 d-grid">	
+						<a class="btn btn-primary" id="searchBtn">검색</a>
+					</div>
+				</form> 
+			</div>
+			
+			<div class="card mb-4">
+				<div class="card-header">
+					<i class="fas fa-table me-1"></i>
+				</div>
+				<div class="card-body">
+					<table id="datatablesSimple">
+						<colgroup>
+							<col width="25%" />
+							<col width="35%" />
+							<col width="20%" />
+							<col width="10%" />
+							<col width="10%" />
+						</colgroup>
+						<thead>
+				        	<tr>
+								<th class="table-center">분류</th>
+				        		<th class="table-center">메뉴명</th>
+				        		<th class="table-center">좋아요 수</th>
+				        		<th class="table-center">수정</th>
+				        		<th class="table-center">삭제</th>
+				        	</tr>	
+				        </thead>
+						<tbody id="searchResult">
+						<c:forEach items="${viewAll}" var="menu" varStatus="status">
+							<tr>
+								<td class="table-center">${menu.menu_type}</td>
+					            <td class="table-center">${menu.menu_name}</td>
+					            <td class="table-center">${menu.like_count}</td>
+					            <td class="table-center">
+									<a href="/admin/owner/menuUpdate?menu_id=${menu.menu_id}"><i class="fas fa-pen" style="color:blue;"></i></a>
+								</td>
+								<td class="table-center">
+									<a href="/owner/menuDelete?menu_id=${menu.menu_id}"><i class="fas fa-window-close" style="color:red;"></i></a>
+								</td>
+							</tr>
+						</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</main>
+           	<%@ include file="/WEB-INF/layout/adminFooter.jspf" %>

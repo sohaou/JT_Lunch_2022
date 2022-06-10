@@ -1,0 +1,19 @@
+package egovframework.jtLunch.admin.dashboard.DAO;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO;
+
+@Repository("dashBoardDAO")
+public class DashBoardDAO {
+	
+	@Autowired
+	private SqlSession sqlSession;
+	
+	public DashBoardDTO getChartData() throws Exception{
+		return sqlSession.selectOne("dashBoard.getChartData");
+	}
+
+}

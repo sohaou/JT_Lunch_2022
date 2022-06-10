@@ -1,0 +1,10 @@
+package egovframework.jtLunch.main.reservation.Service;
+
+import egovframework.jtLunch.main.reservation.DTO.ReservationDTO;
+
+public interface ReservationService {
+	
+	void reserve(ReservationDTO resertvationDTO);
+	
+	ReservationDTO selectUser(String id);
+}

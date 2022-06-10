@@ -1,0 +1,43 @@
+package egovframework.jtLunch.main.reservation.DAO;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.main.reservation.DTO.ReservationDTO;
+import egovframework.jtLunch.main.reservation.DTO.ReservationQRDTO;
+
+@Repository("reservationDAO")
+public class ReservationDAO {
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	
+	public void reserve(ReservationDTO reservationDTO) {
+		sqlSession.insert("reserve.reserve", reservationDTO);
+	}
+	
+	public ReservationDTO selectUser(String id) {
+		return sqlSession.selectOne("reserve.selectUser", id);
+	}
+	
+	public ReservationQRDTO selectQrUser(String id) {
+		return sqlSession.selectOne("reserve.selectQrUser", id);
+	}
+	/*
+	public List<DivisionDTO> selectDepartment() {
+		return sqlSession.selectList("division.selectDepartment");
+	}
+	
+	public List<DivisionDTO> selectTeam(){
+		return sqlSession.selectList("division.selectTeam");
+	}
+	*/
+//	public List<Map<String, Object>> reserveSelectUser(Map<String,Object> requestMap) throws Exception{
+//		return sqlSession.selectList("division.selectUser", requestMap);
+//	}
+//	
+//	public ReserveTableDTO selectTable(String no) {
+//		return sqlSession.selectOne("reserve.selectTable", no);
+//	}
+}

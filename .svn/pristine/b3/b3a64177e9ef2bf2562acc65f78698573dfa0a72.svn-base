@@ -1,0 +1,13 @@
+package egovframework.jtLunch.admin.owner.Service;
+
+import java.util.List;
+
+import egovframework.jtLunch.admin.owner.DTO.MenuDTO;
+import egovframework.jtLunch.cmmn.PagingDTO;
+
+public interface MenuService {
+
+	public int MenuInsert(MenuDTO dto) throws Exception; //메뉴등록
+	public int countMenu() throws Exception;//테이블에 저장된 총 메뉴 수
+	public List<?> printMenuAll(PagingDTO vo) throws Exception;//테이블에 저장된 모든 메뉴 출력	
+}

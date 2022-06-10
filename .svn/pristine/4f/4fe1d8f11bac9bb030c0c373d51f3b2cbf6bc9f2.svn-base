@@ -1,0 +1,40 @@
+package egovframework.jtLunch.admin.dashboard.DTO;
+
+public class DashBoardDTO {
+	
+	private int mon;
+	private int tue;
+	private int wen;
+	private int thu;
+	private int fri;
+	public int getMon() {
+		return mon;
+	}
+	public void setMon(int mon) {
+		this.mon = mon;
+	}
+	public int getTue() {
+		return tue;
+	}
+	public void setTue(int tue) {
+		this.tue = tue;
+	}
+	public int getWen() {
+		return wen;
+	}
+	public void setWen(int wen) {
+		this.wen = wen;
+	}
+	public int getThu() {
+		return thu;
+	}
+	public void setThu(int thu) {
+		this.thu = thu;
+	}
+	public int getFri() {
+		return fri;
+	}
+	public void setFri(int fri) {
+		this.fri = fri;
+	}
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+<select id="print" parameterType="egovframework.jtLunch.cmmn.PagingDTO" resultType="egovframework.jtLunch.main.notice.DTO.NoticeDTO">
+SELECT 
+	num, title, content, writer, up_date, user_check, editor, edit_time
+FROM
+	notice
+ORDER BY 
+	num
+LIMIT #{start}, 5
+</select>
+
+<select id="count" resultType="int">
+	SELECT
+		COUNT(*) FROM
+	FROM
+		notice
+</select>
+</mapper>

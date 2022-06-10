@@ -1,0 +1,10 @@
+package egovframework.jtLunch.main.qrcode.Service;
+
+public interface QrCodeService {
+
+	public int updateRes();
+	
+	public int insertRes();
+
+
+}

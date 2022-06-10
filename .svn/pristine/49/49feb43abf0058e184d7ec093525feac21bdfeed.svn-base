@@ -1,0 +1,18 @@
+package egovframework.jtLunch.main.webPage.DAO;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.main.webPage.VO.MenuplannerVO;
+
+@Repository("menuplannerDAO")
+public class MenuplannerDAO {
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	
+	public MenuplannerVO selectmenu(MenuplannerVO menuplannervo) {
+		return (MenuplannerVO) sqlSession.selectList("menuplanner.selectmenu", menuplannervo);
+	}
+}

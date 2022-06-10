@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+.table-center {text-align: center !important; white-space : nowrap; text-overflow: ellipsis;}
+.table-center > a {text-align: center; white-space : nowrap; text-overflow: ellipsis;}
+.searchForm .dataTable-selector {width : 49%; display: inline-block; padding-right: 0.5rem;}
+.searchForm .dataTable-input {width : 49%; display: inline-block; float: right;}
+.text-ellipsis {display: table; table-layout: fixed; width: 100%; white-space: nowrap; overflow: hidden;text-overflow: ellipsis; white-space:nowrap;}
+.text-ellipsis > * {display: table-cell; overflow: hidden; text-overflow: ellipsis;}
+
+.startDt, .endDt, #stDate, #endDate{
+	width: 90px;
+    height: 28px;
+    margin: 0 0 0 2px;
+    padding: 0 6px;
+    border: 1px solid black;
+    line-height: 22px;
+    font-size: 12px;
+    border-radius: 5px;
+   	outline: 0;
+   	vertical-align: middle;
+}
+#popUpPeriod{
+	display: none;
+}
+#submitBtn{
+	width:60px;
+	height: 30px;
+    background-color: #444444;
+    border: none;
+    color:#fff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    font-size: 12px;
+    border-radius:5px 5px 5px 5px;
+    cursor: pointer;
+	margin-left: 5px;
+    font-family: 'Titillium Web','Noto Sans KR','Malgun Gothic','맑은 고딕',Dotum,'돋움','AppleGothic','Apple SD Gothic Neo',sans-serif;
+}
+#resetBtn{
+	width:60px;
+	height: 30px;
+    background-color: #DDDDDD;
+    border: none;
+    color:rgb(0, 0, 0);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    font-size: 12px;
+    border-radius:5px 5px 5px 5px;
+    cursor: pointer;
+	margin-left: 5px;
+    font-family: 'Titillium Web','Noto Sans KR','Malgun Gothic','맑은 고딕',Dotum,'돋움','AppleGothic','Apple SD Gothic Neo',sans-serif;
+}
+.headDiv{
+	margin-top: 30px;
+ 	float: left;
+ 	/* width: 50%; */
+}
+#periodDiv{
+	font-size: 14px;
+    width: 70%; 
+}
+#insertDiv{
+	font-size: 14px;
+    text-align: right;
+    margin-bottom: 6px;
+    width: 30%;
+}
+#searchOption, #rpp{
+	/* width: 100px; */
+    height: 28px;
+    margin: 0 0 0 2px;
+    padding: 0 6px;
+    border: 1px solid black;
+    line-height: 22px;
+    font-size: 14px;
+    /* border-radius: 5px; */
+   	outline: 0;
+   	vertical-align: middle;
+}
+#page{
+	margin: 30px 0;
+    text-align: center;
+    font-family: 'Nanum Gothic';
+    font-size: 0;
+    line-height: 0;
+}
+#page ol{
+	display: inline-block;
+    font-size: 0;
+    line-height: 0;
+    vertical-align: top;
+    margin: 0;
+   	padding: 0;
+   	font-family: 'Titillium Web','Noto Sans KR','Malgun Gothic','맑은 고딕',Dotum,'돋움','AppleGothic','Apple SD Gothic Neo',sans-serif;
+}
+#page li{
+	display: inline-block;
+    margin: 0 0 0 -1px;
+    border: 1px solid #d7d5d5;
+    font-size: 12px;
+    color: #757575;
+   	padding: 0;
+    vertical-align: top;
+}
+#page a.this{
+	padding-bottom: 6px;
+    font-weight: 700;
+    border-bottom: 3px solid #222;
+    color: #000;
+}
+#page a{
+	/* selector-dummy: expression(this.hideFocus=true) !important; */
+    text-decoration: none !important;
+    color: #000;
+    outline: 0 !important;
+    transition: all 0.3s ease;
+}
+#page img{
+	vertical-align: top;
+	border: none;
+	margin: 0;
+   	padding: 0;
+}
+#page li a{
+	display: block;
+    width: 33px;
+    padding: 9px 0;
+    font-weight: bold;
+    color: #939393;
+    line-height: 14px;
+    background: #fff;
+}
+#rpp_div{
+	margin-top:10px;
+}

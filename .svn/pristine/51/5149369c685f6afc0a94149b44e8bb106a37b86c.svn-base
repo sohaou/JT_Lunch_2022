@@ -1,0 +1,20 @@
+package egovframework.jtLunch.main.qrcode.DAO;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository("qrcodeDAO")
+public class QrCodeDAO {
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	
+	public int updateRes() {
+		return sqlSession.update("user.qrupdate");
+	}
+	public int insertRes() {
+		return sqlSession.insert("user.ateinsert");
+	}
+
+}

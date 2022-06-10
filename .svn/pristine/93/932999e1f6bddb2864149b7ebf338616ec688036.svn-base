@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CheckAteUser">
+	
+	<!-- 금일 예약자 수 출력 -->
+	<select id="countReserve" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			reserve
+		WHERE 
+			res_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select> 
+	<!-- 금일 실 식사자 수 출력 -->
+	<select id="countAte" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			ate_user
+		WHERE 
+			ate_date LIKE CONCAT('%',#{ate_date},'%') 
+	</select>
+<!-- 
+	<select id="AteUserList" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		SELECT 
+			* 
+		FROM 
+			ate_user 
+		WHERE 
+			ate_date &gt;=#{db_startDate} and ate_date &lt;=#{db_endDate}
+			order by ate_date, name
+	</select> -->
+	<select id="AteUserList" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		<![CDATA[
+			SELECT 
+				* 
+			FROM 
+				ate_user 
+			WHERE 
+				ate_date >= #{db_startDate} and ate_date <= #{db_endDate}
+				order by ate_date, name
+		]]>
+	</select>
+	<!-- 수정할 메뉴 정보 가져오기 
+	<select id="getUpdateMenu" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			*
+		FROM 
+			menulist
+		WHERE
+			menu_id=#{menu_id}
+	</select>-->
+	<!-- 메뉴 검색 
+	<select resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO" id="selectSearchList" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			*
+		FROM 
+			menulist
+		WHERE
+			1=1
+		<choose>
+			<when test="type != null and type.equals('menu_type')">AND menu_type LIKE CONCAT('%',#{keyword},'%') </when>			
+			<when test="type != null and type.equals('menu_name')">AND menu_name LIKE CONCAT('%',#{keyword},'%') </when>			
+		</choose>
+	</select>-->
+</mapper>
+

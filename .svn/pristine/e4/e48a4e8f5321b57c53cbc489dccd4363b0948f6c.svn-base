@@ -1,0 +1,37 @@
+package egovframework.jtLunch.admin.owner.DAO;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO;
+
+@Repository("OwnerNoticeDAO")
+public class OwnerNoticeDAO {
+	@Autowired
+	private SqlSession sqlSession;
+	
+	public List<NoticeDTO> OwnerNoticePrint() throws Exception{
+		return sqlSession.selectList("ownerNotice.OwnerNoticePrint");
+	}
+	public int OwnerNoticeInsert(NoticeDTO dto) throws Exception{
+		return sqlSession.insert("ownerNotice.OwnerNoticeInsert", dto);
+	}
+	public NoticeDTO OwnerNoticeDetail(String notice_id) throws Exception{//공지사항 수정 정보 가져오기
+		return sqlSession.selectOne("ownerNotice.OwnerNoticeDetail", notice_id);
+	}
+	public int OwnerNoticeUpdate(NoticeDTO dto) throws Exception{//공지사항 수정
+		return sqlSession.update("ownerNotice.OwnerNoticeUpdate", dto);
+	}
+	public int OwnerNoticeDelete(String notice_id) throws Exception{	//공지사항 삭제
+		return sqlSession.delete("ownerNotice.OwnerNoticeDelete", notice_id);
+	}
+	public int OwnerCountUpdate() throws Exception{	//공지사항 삭제 후 아이디 재정렬
+		return sqlSession.update("ownerNotice.OwnerCountUpdate");
+	}
+	public int OwnerCountSet() throws Exception{//공지사항 삭제 후 아이디 재정렬
+		return sqlSession.update("ownerNotice.OwnerCountSet");
+	}
+}

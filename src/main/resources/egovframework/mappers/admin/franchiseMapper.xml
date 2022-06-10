@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="franchise">
+	<!-- DB에 저장되어 있는 모든 체인점 출력 -->
+	<select id="printAllFranchise" resultType="egovframework.jtLunch.admin.cmmn.DTO.FranchiseDTO">
+		<![CDATA[
+			SELECT
+				ID,
+				PW,
+				SHOP_NAME AS SHOPNAME,
+				TEL,
+				ZIP_CODE,
+				ADDRESS,
+				DETAIL_ADDRESS,
+				PORT_NUM,
+				DATA_URL AS DATAURL,
+				TYPE
+			FROM 
+				franchise
+			ORDER BY
+				DATA_URL
+		]]>
+	</select>
+	<!-- DB에 저장되어 있는 체인점 수 -->
+	<select id="countFranchise" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			franchise
+	</select>
+	<!-- 체인점 아이디 중복 확인 -->
+	<select id="idCheck" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			from 
+				franchise
+			WHERE 
+				ID = #{inputID}
+		]]>
+	</select>
+	<!-- DB에 체인점 정보 저장 -->
+	<insert id="franchiseInsert" parameterType="egovframework.jtLunch.admin.cmmn.DTO.FranchiseDTO">
+		<![CDATA[
+			INSERT INTO 
+				franchise 
+				(
+					ID,
+					PW,
+					SHOP_NAME,
+					TEL,
+					ZIP_CODE,
+					ADDRESS,
+					DETAIL_ADDRESS,
+					PORT_NUM,
+					DATA_URL,
+					TYPE
+				)
+			VALUES 
+				(
+					#{ID},
+					#{PW},
+					#{SHOP_NAME},
+					#{TEL},
+					#{ZIP_CODE},
+					#{ADDRESS},
+					#{DETAIL_ADDRESS},
+					#{PORT_NUM},
+					#{DATA_URL},
+					#{TYPE}				
+				)
+		]]>
+	</insert>
+	<!-- 체인점 정보 상세보기 -->
+	<select id="franchiseDetail" resultType="egovframework.jtLunch.admin.cmmn.DTO.FranchiseDTO">
+		<![CDATA[
+			SELECT
+				ID,
+				PW,
+				SHOP_NAME,
+				TEL,
+				ZIP_CODE,
+				ADDRESS,
+				DETAIL_ADDRESS,
+				PORT_NUM,
+				DATA_URL,
+				TYPE
+			FROM 
+				franchise
+			WHERE
+				ID=#{id}
+		]]>
+	</select>
+	<!-- 체인점 정보 수정 -->
+	<update id="franchiseUpdate" parameterType="egovframework.jtLunch.admin.cmmn.DTO.FranchiseDTO">
+		<![CDATA[
+			UPDATE 
+				franchise
+			SET
+				PW = #{PW},
+				SHOP_NAME = #{SHOP_NAME},
+				TEL = #{TEL},
+				ZIP_CODE = #{ZIP_CODE},
+				ADDRESS = #{ADDRESS},
+				DETAIL_ADDRESS = #{DETAIL_ADDRESS},
+				PORT_NUM = #{PORT_NUM},
+				DATA_URL = #{DATA_URL},
+				TYPE = #{TYPE}
+			WHERE
+				ID = #{ID}
+		]]>
+	</update>
+	<!-- 체인점 삭제 -->
+	<delete id="franchiseDelete">
+		<![CDATA[
+			DELETE 
+			FROM
+				franchise
+			WHERE
+				ID = #{id}
+		]]>
+	</delete>
+	<!-- 체인점 검색 -->
+	<select id="franchiseSearch" parameterType="HashMap" resultType="egovframework.jtLunch.admin.cmmn.DTO.FranchiseDTO">
+			SELECT
+				ID,
+				PW,
+				SHOP_NAME AS SHOPNAME,
+				TEL,
+				ZIP_CODE,
+				ADDRESS,
+				DETAIL_ADDRESS,
+				PORT_NUM,
+				DATA_URL AS DATAURL,
+				TYPE
+			FROM 
+				franchise
+			WHERE
+				1=1
+			<if test='(searchOption == null or searchOption == "") and keyword != null and keyword != ""'>
+				<!-- 검색 조건을 선택하지 않고, 검색어만 입력했을 경우 _ 전체 옵션 중 검색 -->
+				<![CDATA[
+				AND
+				ID LIKE CONCAT('%',#{keyword},'%') OR
+				SHOP_NAME LIKE CONCAT('%',#{keyword},'%') OR
+				TEL LIKE CONCAT('%',#{keyword},'%') OR
+				ZIP_CODE LIKE CONCAT('%',#{keyword},'%') OR
+				ADDRESS LIKE CONCAT('%',#{keyword},'%') OR
+				DETAIL_ADDRESS LIKE CONCAT('%',#{keyword},'%') OR
+				DATA_URL LIKE CONCAT('%',#{keyword},'%')
+				]]>
+			</if>
+			<if test='"ADDRESS".equals(searchOption) and keyword != null and keyword != ""'>
+				<!-- 검색 조건으로 주소를 선택했을 때  -->
+				<![CDATA[
+				AND
+				ZIP_CODE LIKE CONCAT('%',#{keyword},'%') OR
+				ADDRESS LIKE CONCAT('%',#{keyword},'%') OR
+				DETAIL_ADDRESS LIKE CONCAT('%',#{keyword},'%')
+				]]>
+			</if>
+			<if test='searchOption != null and searchOption != "" and searchOption != "ADDRESS" and keyword != null and keyword != ""'>
+				<![CDATA[
+				AND ${searchOption} LIKE CONCAT('%',#{keyword},'%')
+				]]>
+			</if>
+			ORDER BY 
+				DATA_URL
+			<if test='excel != 1'>
+				LIMIT #{startNum}, #{rpp}
+			</if>
+	</select>
+</mapper>

@@ -1,0 +1,40 @@
+package egovframework.jtLunch.main.notice.Controller;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+import egovframework.jtLunch.cmmn.PagingDTO;
+import egovframework.jtLunch.main.notice.Service.NoticeService;
+
+@Controller
+public class NoticeController {
+	
+	@Inject
+	NoticeService noticeService;
+	
+	@RequestMapping(value="/user/notice", method=RequestMethod.GET)
+	public String notice(PagingDTO dto, Model model
+			, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception{
+		
+		int total = noticeService.count();	
+		if (nowPage == null && cntPerPage == null) {
+			nowPage = "1";
+			cntPerPage = "5";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "5";
+		}
+		dto = new PagingDTO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		model.addAttribute("paging", dto);
+		model.addAttribute("Board", noticeService.print(dto));
+		return "/main/notice/Notice";
+	}
+}

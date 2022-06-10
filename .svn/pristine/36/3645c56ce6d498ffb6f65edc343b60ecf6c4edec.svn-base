@@ -1,0 +1,71 @@
+package egovframework.jtLunch.main.notice.DTO;
+
+import java.util.Date;
+
+public class NoticeDTO {
+
+	private int num;
+	private String title;
+	private String content;
+	private String writer;
+	private Date up_date;
+	private int user_check;
+	private String editor;
+	private Date edit_time;
+	
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	public Date getUp_date() {
+		return up_date;
+	}
+	public void setUp_date(Date up_date) {
+		this.up_date = up_date;
+	}
+	public int getUser_check() {
+		return user_check;
+	}
+	public void setUser_check(int user_check) {
+		this.user_check = user_check;
+	}
+	public String getEditor() {
+		return editor;
+	}
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+	public Date getEdit_time() {
+		return edit_time;
+	}
+	public void setEdit_time(Date edit_time) {
+		this.edit_time = edit_time;
+	}
+	@Override
+	public String toString() {
+		return "NoticeDTO [num=" + num + ", title=" + title + ", content=" + content + ", writer=" + writer
+				+ ", up_date=" + up_date + ", user_check=" + user_check + ", editor=" + editor + ", edit_time="
+				+ edit_time + "]";
+	}
+	
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="notice">
+	<!-- 공지사항 모두 출력 -->
+	<select id="NoticePrint" parameterType="egovframework.jtLunch.admin.owner.DTO.NoticeDTO" resultType="egovframework.jtLunch.admin.owner.DTO.NoticeDTO">
+		SELECT *
+		FROM notice
+	</select>
+</mapper>

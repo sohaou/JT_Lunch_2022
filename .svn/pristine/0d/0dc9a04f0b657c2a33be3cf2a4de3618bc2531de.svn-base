@@ -1,0 +1,43 @@
+package egovframework.jtLunch.main.webPage.controller;
+
+import javax.inject.Inject;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import egovframework.jtLunch.main.webPage.Service.MenuplannerService;
+import egovframework.jtLunch.main.webPage.VO.MenuplannerVO;
+
+
+
+/**
+
+  * @Method Name : MainPageController
+
+  * @작성일 : 2021. 10. 12
+
+  * @Method 설명 : 메인쪽 페이지 불러오는 곳
+
+  */
+
+@Controller
+public class MainPageController {
+	
+	@Inject
+	MenuplannerService menuService;
+	
+	@GetMapping("/")
+	public String mainPage() {
+		return "/main/index";
+	}
+	
+	@RequestMapping(value="/user/menuplanner", method=RequestMethod.GET)
+	public String menuplanner(MenuplannerVO menuplannervo, Model model) throws Exception{
+		return "/main/menuPlanner";
+	}
+	
+}

@@ -1,0 +1,37 @@
+package egovframework.jtLunch.main.qrcode.Controller;
+
+import javax.inject.Inject;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import egovframework.jtLunch.main.qrcode.Service.QrCodeService;
+
+
+@Controller
+public class QrCodeController {
+	
+	Logger log = Logger.getLogger(getClass());
+	
+	@Inject
+	QrCodeService qrcodeService;
+	
+	@RequestMapping(value="/user/qrcodeMain", method=RequestMethod.GET)
+	public String qrcodeMain(Model model) throws Exception{
+
+		return "/user/qrscan";
+	}
+	
+	@RequestMapping(value="/user/qrcode", method=RequestMethod.GET)
+	public String qrcodeScan(Model model) throws Exception{
+		
+		qrcodeService.updateRes();
+		qrcodeService.insertRes();
+		
+		return "/main/menuplanner/menuPlanner";
+	}
+
+}

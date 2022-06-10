@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CheckAteUser">
+	
+	<!-- 금일 예약자 수 출력 -->
+	<select id="countReserve" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			reserve
+		WHERE 
+			res_date LIKE CONCAT('%',date_format(NOW(),'%Y-%m-%d'),'%') 
+	</select> 
+	<!-- 금일 실 식사자 수 출력 -->
+	<select id="countAte" resultType="int">
+		<![CDATA[
+			SELECT 
+				COUNT(*)  
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+		]]>
+	</select>
+
+	<select id="AteUserList" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		<![CDATA[
+			SELECT 
+				*
+			FROM 
+				ate_user 
+			WHERE 
+				DATE(ate_date) BETWEEN #{db_startDate} AND #{db_endDate}
+				order by ate_date, name
+		]]>
+	</select>
+	
+	<select id="DayAteUserAll" resultType="egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO">
+		<![CDATA[
+			SELECT 
+				* 
+			FROM 
+				ate_user 
+			WHERE 
+				ate_date LIKE CONCAT('%',#{ate_date},'%') 
+		]]>
+	</select>
+	
+	<select id="CountAteTerm" resultType="int">
+		SELECT 
+			COUNT(*)  
+		FROM 
+			ate_user 
+		WHERE 
+			DATE(ate_date) BETWEEN #{startDate} AND #{endDate}
+	</select>
+	
+	<select id="CountAteTermTable" resultType="int">
+		SELECT 
+			COUNT(*)  
+		FROM 
+			ate_user 
+		WHERE 
+			ate_date LIKE CONCAT('%',#{ate_date},'%') 
+	</select>
+</mapper>
+

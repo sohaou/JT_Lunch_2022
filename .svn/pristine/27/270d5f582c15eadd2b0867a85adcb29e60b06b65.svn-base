@@ -1,0 +1,65 @@
+package egovframework.jtLunch.admin.dashboard.Controller;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import egovframework.jtLunch.admin.dashboard.DTO.DashBoardDTO;
+import egovframework.jtLunch.admin.dashboard.Service.DashBoardService;
+import egovframework.jtLunch.admin.dashboard.Util.WeekDayUtil;
+import egovframework.jtLunch.admin.owner.Service.MenuService;
+
+@Controller
+public class DashBoardController {
+	
+	@Resource(name="dashBoardService")
+	private DashBoardService dashBoardService;
+	@Autowired
+	private MenuService menuService;
+	//관리자 main
+	@GetMapping("/admin/main")
+	public String DashBoardPage(Model model) throws Exception {
+		
+		Calendar cal = Calendar.getInstance();
+		
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) +1;
+		int date = cal.get(Calendar.DATE);
+		
+		DashBoardDTO dashboardDTO = dashBoardService.getChartData();
+		DashBoardDTO vo = dashBoardService.getChartMonth();
+		List<DashBoardDTO> dto = dashBoardService.searchUser();
+		
+		int money=7000;
+		int reserveCount=menuService.countReserve();
+		int ate_user=menuService.countAte_user();
+		int monthate = dashBoardService.getmonthAte();
+		Date nowDate = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
+		String strNowDate = simpleDateFormat.format(nowDate);
+		model.addAttribute("reserveCount", reserveCount);
+		model.addAttribute("ate_user", ate_user);
+		model.addAttribute("month", strNowDate);
+		model.addAttribute("money", money);
+		model.addAttribute("weekCnt", WeekDayUtil.getCurrentWeekOfMonth(year,month,date));
+		model.addAttribute("chartData", dashboardDTO);
+		model.addAttribute("chartMData", vo);
+		model.addAttribute("monthate", monthate);
+		model.addAttribute("searchUser", dto);
+		
+		return "admin/adminMain";
+	}
+	@GetMapping("/admin/logout")
+	public String adminLogoutPage(Model model) throws Exception {
+	
+		return "admin/login/adminLogin";
+	}
+}

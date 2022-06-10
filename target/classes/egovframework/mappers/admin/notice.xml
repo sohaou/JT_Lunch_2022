@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="notice">
+	<!-- 공지사항 출력번호 정렬 -->
+	<update id="CountSet">
+		SET @CNT=0
+	</update>
+	<!-- 공지사항 출력번호 정렬 -->
+	<update id="CountUpdate" >
+		UPDATE 
+			notice
+		SET
+			notice.notice_id = @CNT:=@CNT+1
+	</update>
+	<!-- 공지사항 번호 set(삭제 후 삽입할 때) -->
+	<update id="CountStartNum">
+		ALTER TABLE notice AUTO_INCREMENT = #{count + 1}
+	</update>
+	<!-- 공지사항 전체 개수 -->
+	<select id="CountNotice" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			notice
+	</select>
+	<!-- 공지사항 팝업 설정 reset -->
+	<update id="popUpReset">
+		UPDATE
+			notice
+		SET
+			POP_UP = 0
+		WHERE
+			POP_UP = 1
+	</update>
+	<!-- 공지사항 출력 -->
+	<select id="NoticePrint" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO" resultType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		SELECT 
+			notice_id, 
+			title, 
+			content, 
+			writer, 
+			DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as up_date, 
+			user_check, 
+			editor, 
+			DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as edit_time,
+			POP_UP,
+			POP_UP_START_DATE,
+			POP_UP_END_DATE
+		FROM 
+			notice
+		ORDER BY
+			up_date DESC
+	</select>
+	<!-- 공지사항 등록 -->
+	<insert id="NoticeInsert" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">			
+			INSERT INTO notice 
+				(
+					title, 
+					content, 
+					writer,
+					POP_UP,
+					POP_UP_START_DATE,
+					POP_UP_END_DATE
+				)
+			VALUES
+				(
+					#{title}, 
+					#{content}, 
+					"관리자",
+					#{pop_up},
+				<if test='pop_up_start_date != null and pop_up_start_date != "" and pop_up_end_date != null and pop_up_end_date != ""'> 
+					#{pop_up_start_date},
+					#{pop_up_end_date}
+				</if>
+				<if test='pop_up_start_date == null or pop_up_start_date == "" or pop_up_end_date == null or pop_up_end_date == ""'>
+					null,
+					null
+				</if>
+				)
+	</insert>
+	<!-- 공지사항 삭제 -->
+	<delete id="NoticeDelete" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		<![CDATA[
+			DELETE 
+			FROM 
+				notice
+			WHERE 
+				notice_id = #{notice_id}
+		]]>
+	</delete>
+	<!-- 공지사항 수정 -->
+	<update id="NoticeUpdate" parameterType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		UPDATE 
+			notice
+		SET 
+			title = #{title}, 
+			content = #{content}, 
+			editor = '관리자', 
+			edit_time = date_format(NOW(),'%Y-%m-%d %H:%i:%s'),
+			POP_UP = #{pop_up},
+			<if test='pop_up_start_date != null and pop_up_start_date != "" and pop_up_end_date != null and pop_up_end_date != ""'> 
+				pop_up_start_date =	#{pop_up_start_date},
+				pop_up_end_date	= #{pop_up_end_date}
+			</if>
+			<if test='pop_up_start_date == null or pop_up_start_date == "" or pop_up_end_date == null or pop_up_end_date == ""'>
+				pop_up_start_date =	null,
+				pop_up_end_date = null
+			</if>
+		WHERE 
+			notice_id = #{notice_id}
+	</update>
+	<!-- 공지사항 상세보기 -->
+	<select id="NoticeSelect" resultType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		<![CDATA[
+			SELECT 
+				notice_id, 
+				title, 
+				content, 
+				writer, 
+				DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as up_date, 
+				user_check, 
+				editor, 
+				DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as edit_time,
+				POP_UP,
+				POP_UP_START_DATE,
+				POP_UP_END_DATE
+			FROM 
+				notice
+			WHERE 
+				notice_id = #{notice_id}
+		]]>	
+	</select>
+	<!-- 공지사항 검색 -->
+	<select id="NoticeSearch" resultType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		SELECT
+			notice_id as noticeId, 
+			title, 
+			content, 
+			writer, 
+			DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as uploadDate, 
+			user_check as userCheck, 
+			editor, 
+			DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as editTime,
+			POP_UP,
+			POP_UP_START_DATE,
+			POP_UP_END_DATE
+		FROM 
+			notice
+		WHERE
+			1=1
+		<if test='searchOption != "" and searchOption != null and keyword != "" and keyword != null'>
+			<![CDATA[
+			AND ${searchOption} LIKE CONCAT('%',#{keyword},'%')
+			]]>
+		</if>
+		<if test='startDate != "" and startDate != null'>
+			AND DATE(up_date) >= #{startDate} 
+		</if>
+		<if test='endDate != "" and endDate != null'>
+			<![CDATA[
+			AND DATE(up_date) <= #{endDate} 
+			]]>
+		</if>
+		<if test='(searchOption == null or searchOption == "") and keyword != null and keyword != ""'>
+			<!-- 검색 조건을 선택하지 않고, 검색어만 입력했을 경우 _ 전체 옵션 중 검색 -->
+			<![CDATA[
+			AND title LIKE CONCAT('%',#{keyword},'%') OR
+			content LIKE CONCAT('%',#{keyword},'%') OR
+			writer LIKE CONCAT('%',#{keyword},'%') OR
+			up_date LIKE CONCAT('%',#{keyword},'%')
+			]]>
+		</if>
+		ORDER BY 
+			up_date DESC
+		<if test='excel != 1'>
+			LIMIT #{startNum}, #{rpp}
+		</if>
+	</select>
+	<!-- 공지사항 검색 count -->
+	<select id="NoticeSearchCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			notice
+		WHERE
+			1=1
+		<if test='searchOption != "" and searchOption != null and keyword != "" and keyword != null'>
+			<![CDATA[
+			AND ${searchOption} LIKE CONCAT('%',#{keyword},'%')
+			]]>
+		</if>
+		<if test='startDate != "" and startDate != null'>
+			<![CDATA[
+			AND DATE(up_date) >= #{startDate} 
+			]]>
+		</if>
+		<if test='endDate != "" and endDate != null'>
+			<![CDATA[
+			AND DATE(up_date) <= #{endDate} 
+			]]>
+		</if>
+		<if test='(searchOption == "" or searchOption == null) and keyword != null and keyword != ""'>
+			<!-- 검색 조건을 선택하지 않고, 검색어만 입력했을 경우 _ 전체 옵션 중 검색 -->
+			<![CDATA[
+			AND title LIKE CONCAT('%',#{keyword},'%') OR
+			content LIKE CONCAT('%',#{keyword},'%') OR
+			writer LIKE CONCAT('%',#{keyword},'%') OR
+			up_date LIKE CONCAT('%',#{keyword},'%')
+			]]>
+		</if>
+	</select>
+	<!-- 팝업 등록한 공지사항 정보 가져오기 -->
+	<select id="NoticePopup" resultType="egovframework.jtLunch.admin.dashboard.DTO.NoticeDTO">
+		<![CDATA[
+			SELECT
+				notice_id as noticeId, 
+				title, 
+				content, 
+				writer, 
+				DATE_FORMAT(up_date,'%Y-%m-%d %H:%i:%s') as uploadDate, 
+				user_check as userCheck, 
+				editor, 
+				DATE_FORMAT(edit_time,'%Y-%m-%d %H:%i:%s') as editTime,
+				POP_UP,
+				POP_UP_START_DATE,
+				POP_UP_END_DATE
+			FROM
+				notice
+			WHERE
+				POP_UP = 1
+			AND
+				#{today} BETWEEN POP_UP_START_DATE AND POP_UP_END_DATE;
+		]]>
+	</select>
+</mapper>

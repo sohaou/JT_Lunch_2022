@@ -1,0 +1,718 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Calendar"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ include file="/WEB-INF/layout/ownerHeader.jspf" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/owner/calender.css"> 
+
+<script type="text/javascript">
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var token = $("meta[name='_csrf']").attr("content");
+	let today = new Date();   
+	let date = today.getDate();
+	
+	function showinsertMenuPlan(year,month,day){
+		var month=month;
+		var day=day;
+		var select;
+		if(parseInt(Number(day)/10)==0){
+			select=year+'-'+month+'-0'+day;
+		} else{
+			select=year+'-'+month+'-'+day;	
+		}
+		
+		$('input[name=selectDay]').attr('value',select);
+		$("#selectDay").html("< "+select+" >");
+		if(parseInt(Number(date))<=parseInt(Number(day))){
+			$("#insertTodayMenu").modal('show');	
+		} else if(parseInt(Number(date))>parseInt(Number(day))){
+			$("#modaltitle").html("< "+select+" > 식단");
+			showTodayMenu(select);
+			//$("#todayMenuModal").modal('show');
+		}
+	}
+	
+	function showTodayMenu(selectDate){
+		var str=selectDate;
+		$.ajax({
+			url: "<c:url value='/owner/printTodayMenuPlan'/>",
+			type: "POST",
+			data : {selectDate:str},
+			dataType : 'json',
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			success : function(data){
+				$("#rice").html(data.result.steamed_rice);
+				$("#soup").html(data.result.soup);
+				for(int i=0;i<data.sidedish.size();i++){
+					
+				}				 
+			},				
+			error:function(request,status,error)
+			{
+			   alert(error);
+			}
+		});
+		$("#menuModifyModal").modal('show');
+	}
+	function cancel(){
+		$("#rice").val("").prop("selected",true);
+		$("#soup").val("").prop("selected",true);
+		$("#sideDish").val("").prop("selected",true);
+		$("#sd1").hide(); $("#sd1_c").hide(); $("select[name='sd1']").val("").prop("selected",true);
+		$("#sd2").hide(); $("#sd2_c").hide(); $("select[name='sd2']").val("").prop("selected",true);
+		$("#sd3").hide(); $("#sd3_c").hide(); $("select[name='sd3']").val("").prop("selected",true);
+		$("#sd4").hide(); $("#sd4_c").hide(); $("select[name='sd4']").val("").prop("selected",true);
+		$("#sd5").hide(); $("#sd5_c").hide(); $("select[name='sd5']").val("").prop("selected",true);
+		$("#sd6").hide(); $("#sd6_c").hide(); $("select[name='sd6']").val("").prop("selected",true);
+		$("#sd7").hide(); $("#sd7_c").hide(); $("select[name='sd7']").val("").prop("selected",true);
+		$("#sd8").hide(); $("#sd8_c").hide(); $("select[name='sd8']").val("").prop("selected",true);
+		$("#sd9").hide(); $("#sd9_c").hide(); $("select[name='sd9']").val("").prop("selected",true);
+		$("#insertTodayMenu").modal('hide');
+	}
+</script>
+<style>
+	#closeate{
+	    background-color: white;
+	    border: none;
+	    color:black;
+	    padding: 15px 0;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 15px;
+	    margin: 4px;
+	    cursor: pointer;
+	}
+	#today_button {
+	    background-color: white;
+	    border: none;
+	    color:blue;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 15px;
+	    font-weight:bold;
+	    margin: 4px;
+	    cursor: pointer;
+	}
+	#AteUserTable {
+		width:100%;
+		border-collapse: collapse;
+		border-top: 3px solid #168;
+    }  
+    #AteUserTable th {
+		color: #168;
+		background: #f0f6f9;
+		text-align: center;
+    }
+    #AteUserTable th, #AteUserTable td {
+		padding: 10px;
+		border: 1px solid #ddd;
+    }
+    #AteUserTable th:first-child, #AteUserTable td:first-child {
+		border-left: 0;
+    }
+    #AteUserTable th:last-child, #AteUserTable td:last-child {
+		border-right: 0;
+    }
+    #AteUserTable tr td{
+		text-align: center;
+		font-size:12px;
+    }
+    #selectDay{
+    	margin-left:auto;
+    	margin-right:auto;
+    	margin-top:10px;
+    }
+</style>
+<main>  
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">일별 식단 등록</h1>
+			<ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item">식당운영자</li>
+            	<li class="breadcrumb-item active">일별 식단 등록</li>
+			</ol>
+		<form name="calendarFrm" id="calendarFrm" action="" method="GET">
+	<div class="calendar" >
+	<!--날짜 네비게이션  -->
+	<div class="navigation">
+		<a class="before_after_year" href="/owner/menuPlanInsertCalendar?year=${today_info.search_year-1}&month=${today_info.search_month-1}">
+			&lt;&lt;
+		<!-- 이전해 -->
+		</a> 
+		<a class="before_after_month" href="/owner/menuPlanInsertCalendar?year=${today_info.before_year}&month=${today_info.before_month}">
+			&lt;
+		<!-- 이전달 -->
+		</a> 
+		<span class="this_month">
+			&nbsp;${today_info.search_year}. 
+			<c:if test="${today_info.search_month<10}">0</c:if>${today_info.search_month}
+		</span>
+		<a class="before_after_month" href="/owner/menuPlanInsertCalendar?year=${today_info.after_year}&month=${today_info.after_month}">
+		<!-- 다음달 -->
+			&gt;
+		</a> 
+		<a class="before_after_year" href="/owner/menuPlanInsertCalendar?year=${today_info.search_year+1}&month=${today_info.search_month-1}">
+			<!-- 다음해 -->
+			&gt;&gt;
+		</a>
+	</div>
+
+	<table class="calendar_body">
+		<thead>
+			<tr bgcolor="#CECECE">
+				<td class="day sun" >
+					일
+				</td>
+				<td class="day" >
+					월
+				</td>
+				<td class="day" >
+					화
+				</td>
+				<td class="day" >
+					수
+				</td>
+				<td class="day" >
+					목
+				</td>
+				<td class="day" >
+					금
+				</td>
+				<td class="day sat" >
+					토
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<c:forEach var="dateList" items="${dateList}" varStatus="date_status">
+				<c:choose>
+				<c:when test="${dateList.value=='today'}">
+				<c:if test="${date_status.index%7==0}">
+					<tr>
+				</c:if>
+					<td class="today"  onclick="showinsertMenuPlan('${today_info.search_year}','${today_info.search_month}','${dateList.date}')">
+						<div class="date">
+  				</c:when>
+				<c:when test="${date_status.index%7==6}">
+					<td class="sat_day">
+						<div class="sat">
+				</c:when>
+				<c:when test="${date_status.index%7==0}">
+			</tr>
+			<tr>
+					<td class="sun_day">
+						<div class="sun">
+				</c:when>
+ 				<c:otherwise>
+					<td class="normal_day" onclick="showinsertMenuPlan('${today_info.search_year}','${today_info.search_month}','${dateList.date}')">
+						<div class="date">
+				</c:otherwise>
+				</c:choose>
+						${dateList.date}
+						</div>
+						<div id="menuplan_day">
+							<c:forEach var="ateuserList" items="${dateList.selectDayMenulist}" varStatus="ateuser_status">
+								<c:if test="${ateuserList.today_date!=null}"> 
+									<div style="text-align:center;">
+		                               <i class="fas fa-utensils" style="font-size:20px;"></i>
+		                            </div>
+								</c:if>
+							</c:forEach>
+							<br>
+						</div>
+					</td>
+				</c:forEach>
+		</tbody>
+	</table>
+	</div>
+	</form>
+</div>
+<div class="modal fade" id="insertTodayMenu" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"> 
+	<div class="container-fluid px-4">
+	<div class="modal-dialog"> 
+	<div class="modal-content"> 
+	<!-- Modal Header --> 
+	<div class="modal-header"> 
+		<h4 class="modal-title">일별 식단 등록</h4>
+		<button id="closeate" onclick="cancel();">X</button>
+	</div> 
+	<h5 id="selectDay"></h5>
+	<!-- Modal body --> 
+	<div class="modal-body"> 
+	<table style="width:100%;">
+				<form id="menuplan" name="menuplan" role="form" method="post" autocomplete="off">	
+				<tr>
+					<td>
+						<input type="hidden" name="selectDay" id="selectDay"/>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:20%;">
+						<strong>* </strong>&nbsp;
+						<font size="3em" face="Verdana" font-style="bold">밥</font>
+					</th>
+					<td>
+						<select class="dataTable-selector" name="rice" id="rice">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:20%;">	
+						<strong>* </strong>&nbsp;
+						<font size="3em" face="Verdana" font-style="bold">국</font>
+					</th>
+					<td>
+						<select class="dataTable-selector" name="soup" id="soup">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:30%;">	
+						<strong>* </strong>
+						<font size="3em" face="Verdana" font-style="bold">반찬</font>
+					</th>
+					<td>
+						<select class="dataTable-selector" name="sideDish" id="sideDish">
+							<option value=""> ---- 메뉴명 ---- </option>
+						</select>
+					</td>
+					<td>
+						<input class="btn btn-dark" style="font-size:13px; width:60px; text-align:center;" type="button" value="추가" onclick="addMenu();"/><!--반찬추가버튼-->
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd1' style='display:none'>
+							<select class="dataTable-selector" name="sd1">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd1_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd1');"></i><!-- 삭제버튼 -->
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd2' style='display:none'>
+							<select class="dataTable-selector" name="sd2">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd2_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd2');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd3' style='display:none'>
+							<select class="dataTable-selector" name="sd3">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd3_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd3');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd4' style='display:none'>
+							<select class="dataTable-selector" name="sd4">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd4_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd4');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd5' style='display:none'>
+							<select class="dataTable-selector" name="sd5">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd5_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd5');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd6' style='display:none'>
+							<select class="dataTable-selector" name="sd6">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd6_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd6');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd7' style='display:none'>
+							<select class="dataTable-selector" name="sd7">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd7_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd7');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd8' style='display:none'>
+							<select class="dataTable-selector" name="sd8">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd8_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd8');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<div id='sd9' style='display:none'>
+							<select class="dataTable-selector" name="sd9">
+								<option value=""> ---- 메뉴명 ---- </option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div id='sd9_c' style='display:none'>
+							<i class="fas fa-window-close" style="color:black;" onclick="deleteMenu('sd9');"></i>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />&nbsp;
+						<input class="btn btn-primary" type="button" value="등록" onclick="check_input()"/>&nbsp;&nbsp;
+						<input class="btn btn-secondary" type="button" value="취소" onclick="cancel()"/>
+					</td>
+				</tr>
+				</div>
+				</form>
+			</table>
+	</div> 
+	<!-- Modal footer 
+	<div class="modal-footer"> 
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	</div> --> 
+	</div> 
+	</div> 
+	</div>
+</div>
+<div class="modal fade" id="todayMenuModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"> 
+	<div class="container-fluid px-4">
+	<div class="modal-dialog"> 
+	<div class="modal-content"> 
+	<!-- Modal Header --> 
+	<div class="modal-header"> 
+		<h4 class="modal-title" id="modaltitle"></h4>
+		<button id="closeate" onclick="$('#todayMenuModal').modal('hide');">X</button>
+	</div> 
+	<!-- Modal body --> 
+	<div class="modal-body"> 
+		<table style="margin-left: auto; margin-right: auto; border:1px solid black; border-collapse:collapse; width:250px;">
+			<tr><td><br></td></tr>
+				<tr>
+					<td style="text-align: center; padding:0.1em;"><font size="5.3em" face="Verdana" id="modaltitle"></font></td>
+				</tr>
+				<tr><td><br></td></tr>
+				<tr>
+					<td style="text-align: center; padding:0.1em;" id="rice"></td>
+				</tr>
+				<tr>
+					<td style="text-align: center; padding:0.1em;" id="soup"></td>
+				</tr>
+				<c:forTokens var="item" items="${todayMenu.side_dish}" delims="/">
+				<tr>
+					<td style="text-align: center; padding:0.1em;">${item}</td>
+				</tr>
+				</c:forTokens>
+				<tr><td><br></td></tr>
+			<tr><td><br></td></tr>
+		</table>
+	</div> 
+	<!-- Modal footer -->
+	<div class="modal-footer"> 
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	</div> 
+	</div> 
+	</div> 
+	</div>
+</div>
+</main>
+<script>
+var sideDish=1;
+//컨트롤러에서 데이터 받기
+var jsonData = JSON.parse('${category}');
+console.log(jsonData);
+
+	var cate1Arr = new Array(); //밥
+	var cate1Obj = new Object(); //밥
+	
+	var cate2Arr = new Array(); //국
+	var cate2Obj = new Object(); //국
+	
+	var cate3Arr = new Array(); //반찬
+	var cate3Obj = new Object(); //반찬
+	
+	// 각 셀렉트 박스에 삽입할 데이터 준비
+	for(var i = 0; i < jsonData.length; i++) {
+	 
+	 if(jsonData[i].menu_type=="밥") {
+		 cate1Obj = new Object();  //초기화
+		 cate1Obj.menu_name = jsonData[i].menu_name;
+		 cate1Obj.menu_type = jsonData[i].menu_type;
+		 cate1Arr.push(cate1Obj);
+	 }
+	 else if(jsonData[i].menu_type=="국") {
+		 cate2Obj = new Object();  //초기화
+		 cate2Obj.menu_name = jsonData[i].menu_name;
+		 cate2Obj.menu_type = jsonData[i].menu_type;
+		 cate2Arr.push(cate2Obj);
+	 }
+	 else if(jsonData[i].menu_type=="반찬") {
+		 cate3Obj = new Object();  //초기화
+		 cate3Obj.menu_name = jsonData[i].menu_name;
+		 cate3Obj.menu_type = jsonData[i].menu_type;
+		 cate3Arr.push(cate3Obj);
+	 }
+	}
+
+	// 각 셀렉트 박스에 데이터 삽입
+	var cate1Select = $("select[name='rice']") //밥 셀렉트박스
+	var cate2Select = $("select[name='soup']") //국 셀렉트박스
+	var cate3Select = $("select[name='sideDish']") //반찬 셀렉트박스
+	var sd1 = $("select[name='sd1']")
+	var sd2 = $("select[name='sd2']")
+	var sd3 = $("select[name='sd3']")
+	var sd4 = $("select[name='sd4']")
+	var sd5 = $("select[name='sd5']")
+	var sd6 = $("select[name='sd6']")
+	var sd7 = $("select[name='sd7']")
+	var sd8 = $("select[name='sd8']")
+	var sd9 = $("select[name='sd9']")
+	
+	for(var i = 0; i < cate1Arr.length; i++) {
+	 cate1Select.append("<option value='" + cate1Arr[i].menu_name + "'>"
+	      + cate1Arr[i].menu_name + "</option>"); 
+	}
+	for(var i = 0; i < cate2Arr.length; i++) {
+		 cate2Select.append("<option value='" + cate2Arr[i].menu_name + "'>"
+		      + cate2Arr[i].menu_name + "</option>"); 
+		}
+	for(var i = 0; i < cate3Arr.length; i++) {
+	 cate3Select.append("<option value='" + cate3Arr[i].menu_name + "'>"
+	      + cate3Arr[i].menu_name + "</option>");
+	 sd1.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd2.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd3.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd4.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd5.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd6.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd7.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd8.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	 sd9.append("<option value='" + cate3Arr[i].menu_name + "'>"
+		      + cate3Arr[i].menu_name + "</option>"); 
+	}
+
+//메뉴 추가 버튼 클릭시 메뉴 선택할 수 있는 셀렉트박스 추가
+	function addMenu(){
+		if(sideDish==1){$("#sd1").show(); $("#sd1_c").show(); sideDish++;}
+		else if(sideDish==2){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").hide(); $("#sd3_c").hide(); 
+			$("#sd4").hide(); $("#sd4_c").hide(); 
+			$("#sd5").hide(); $("#sd5_c").hide();
+			$("#sd6").hide(); $("#sd6_c").hide(); 
+			$("#sd7").hide(); $("#sd7_c").hide();
+			$("#sd8").hide(); $("#sd8_c").hide(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==3){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").hide(); $("#sd4_c").hide(); 
+			$("#sd5").hide(); $("#sd5_c").hide();
+			$("#sd6").hide(); $("#sd6_c").hide(); 
+			$("#sd7").hide(); $("#sd7_c").hide();
+			$("#sd8").hide(); $("#sd8_c").hide(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==4){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").show(); $("#sd4_c").show(); 
+			$("#sd5").hide(); $("#sd5_c").hide();
+			$("#sd6").hide(); $("#sd6_c").hide(); 
+			$("#sd7").hide(); $("#sd7_c").hide();
+			$("#sd8").hide(); $("#sd8_c").hide(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==5){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").show(); $("#sd4_c").show(); 
+			$("#sd5").show(); $("#sd5_c").show();
+			$("#sd6").hide(); $("#sd6_c").hide(); 
+			$("#sd7").hide(); $("#sd7_c").hide();
+			$("#sd8").hide(); $("#sd8_c").hide(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==6){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").show(); $("#sd4_c").show(); 
+			$("#sd5").show(); $("#sd5_c").show();
+			$("#sd6").show(); $("#sd6_c").show(); 
+			$("#sd7").hide(); $("#sd7_c").hide();
+			$("#sd8").hide(); $("#sd8_c").hide(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==7){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").show(); $("#sd4_c").show(); 
+			$("#sd5").show(); $("#sd5_c").show();
+			$("#sd6").show(); $("#sd6_c").show(); 
+			$("#sd7").show(); $("#sd7_c").show();
+			$("#sd8").hide(); $("#sd8_c").hide(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==8){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").show(); $("#sd4_c").show(); 
+			$("#sd5").show(); $("#sd5_c").show();
+			$("#sd6").show(); $("#sd6_c").show(); 
+			$("#sd7").show(); $("#sd7_c").show();
+			$("#sd8").show(); $("#sd8_c").show(); 
+			$("#sd9").hide(); $("#sd9_c").hide(); 
+			sideDish++;
+		}
+		else if(sideDish==9){
+			$("#sd1").show(); $("#sd1_c").show();
+			$("#sd2").show(); $("#sd2_c").show();
+			$("#sd3").show(); $("#sd3_c").show(); 
+			$("#sd4").show(); $("#sd4_c").show(); 
+			$("#sd5").show(); $("#sd5_c").show();
+			$("#sd6").show(); $("#sd6_c").show(); 
+			$("#sd7").show(); $("#sd7_c").show();
+			$("#sd8").show(); $("#sd8_c").show(); 
+			$("#sd9").show(); $("#sd9_c").show(); 
+			sideDish++;
+		}
+		else if(sideDish==10){alert("더 이상 반찬을 추가할 수 없습니다");}
+	}
+	//메뉴 추가 후 추가한 메뉴 삭제할 때
+	function deleteMenu(divn){
+		if(divn=='sd1'){$("#sd1").hide(); $("#sd1_c").hide(); $("select[name='sd1']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd2'){$("#sd2").hide(); $("#sd2_c").hide(); $("select[name='sd2']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd3'){$("#sd3").hide(); $("#sd3_c").hide(); $("select[name='sd3']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd4'){$("#sd4").hide(); $("#sd4_c").hide(); $("select[name='sd4']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd5'){$("#sd5").hide(); $("#sd5_c").hide(); $("select[name='sd5']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd6'){$("#sd6").hide(); $("#sd6_c").hide(); $("select[name='sd6']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd7'){$("#sd7").hide(); $("#sd7_c").hide(); $("select[name='sd7']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd8'){$("#sd8").hide(); $("#sd8_c").hide(); $("select[name='sd8']").val("").prop("selected",true); sideDish--;}
+		else if(divn=='sd9'){$("#sd9").hide(); $("#sd9_c").hide(); $("select[name='sd9']").val("").prop("selected",true); sideDish--;}
+	}
+	
+	function check_input() {
+	    if (!document.menuplan.rice.value && document.menuplan.soup.value=="" && document.menuplan.sideDish.value=="")
+	    {
+	        alert("최소 1개 이상의 메뉴를 입력해주세요!");
+	        document.menuplan.rice.focus();
+	        // 화면 커서 이동
+	        return;
+	    }
+	    
+	    $.ajax({
+			url: "<c:url value='/owner/insertTodayMenuPlan'/>",
+		    type: "POST",
+		    data : $("#menuplan").serialize(),
+		    /*beforeSend: function (xhr) {
+		    	xhr.setRequestHeader(header, token);
+		           
+			},*/
+		    success : function(data){
+				alert(data);
+				$('#insertTodayMenu').modal('hide');
+			},
+			complete : function(data){
+				location.reload();
+			},
+			error:function(request,status,error)
+		    {
+		    	alert(error);
+			}
+		});
+	    // 모두 확인 후 submit()
+	 }
+</script>
+<%@ include file="/WEB-INF/layout/adminFooter.jspf" %>

@@ -1,0 +1,15 @@
+package egovframework.jtLunch.admin.owner.Controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class OwnerBoardController {
+
+	//식당운영자 공지사항 페이지
+	@GetMapping("/owner/notice")
+	public String OwnerNotice() {
+		
+		return "admin/owner/notice/ownerNotice";
+	}
+}

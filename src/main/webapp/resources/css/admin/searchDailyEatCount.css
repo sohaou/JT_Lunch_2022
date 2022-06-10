@@ -1,0 +1,127 @@
+@charset "UTF-8";
+
+#chartdiv {
+  	width: 100%;
+  	height: 500px;
+}
+#PeriodSet{
+	/* padding: 25px;
+    margin-left: auto;
+    margin-right: auto; */
+    /* margin-right: 5px; */
+    font-size: 14px;
+    text-align: left;
+}
+#searchBtn{
+	width:60px;
+	height: 30px;
+    background-color: #444444;
+    border: none;
+    color:#fff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    font-size: 12px;
+    border-radius:5px 5px 5px 5px;
+    cursor: pointer;
+	margin-left: 5px;
+    font-family: 'Titillium Web','Noto Sans KR','Malgun Gothic','맑은 고딕',Dotum,'돋움','AppleGothic','Apple SD Gothic Neo',sans-serif;
+}
+#resetBtn{
+	width:60px;
+	height: 30px;
+    background-color: #DDDDDD;
+    border: none;
+    color:rgb(0, 0, 0);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    font-size: 12px;
+    border-radius:5px 5px 5px 5px;
+    cursor: pointer;
+	margin-left: 5px;
+    font-family: 'Titillium Web','Noto Sans KR','Malgun Gothic','맑은 고딕',Dotum,'돋움','AppleGothic','Apple SD Gothic Neo',sans-serif;
+}
+#PeriodSet input[type=text]{
+	width: 80px;
+    height: 28px;
+    margin: 0 0 0 2px;
+    padding: 0 6px;
+    border: 1px solid black;
+    line-height: 22px;
+    font-size: 12px;
+    border-radius: 5px;
+   	outline: 0;
+   	vertical-align: middle;
+}
+#PeriodSet button{
+	width: 18px;
+    height: 14px;
+    margin: 0 5px 0 2px;
+    background: none;
+    overflow: visible;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: 0;
+}
+#PeriodSet img{
+	margin: 0;
+   	padding: 0;
+	border: none;
+    vertical-align: middle;
+}
+#searchOption{
+	/* width: 100px; */
+    height: 26px;
+    margin: 0 0 0 2px;
+    padding: 0 6px;
+    border: 1px solid black;
+    line-height: 22px;
+    font-size: 14px;
+    border-radius: 5px;
+   	outline: 0;
+   	vertical-align: middle;
+}
+#before1Month{
+	vertical-align: middle;
+    font-size: 14px;
+    background: #333;
+   	color: #fff;
+   	border: 1px solid #D5D5D5;
+   	width: 100px;
+   	height: 28px;
+   	border-radius:5px;
+   	margin-left: 5px;
+}
+.lastData{
+	width: 100%;
+	margin-left: 50px;
+}
+.lastData li{
+	display: inline-block;
+	padding: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+/* .lastData li.selected{
+    color:red;
+    font-weight: 600;
+}
+ */
+ .periodDiv{
+ 	margin-top: 10px;
+ 	float: left;
+ 	width: 50%;
+ }
+ #lastDataSet{
+ 	text-align: right;
+ }
+#lastDataSet{
+	font-size: 14px;
+    text-align: right;
+    margin-bottom: 6px;
+}

@@ -1,0 +1,36 @@
+package egovframework.jtLunch.main.qrcode.DAO;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.main.qrcode.DTO.QrCodeDTO;
+import egovframework.jtLunch.main.reservation.DTO.ReservationDTO;
+
+@Repository("qrcodeDAO")
+public class QrCodeDAO {
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	
+	public int updateRes(String id) {
+		return sqlSession.update("user.qrupdate", id);
+	}
+	public int insertRes(String id) {
+		return sqlSession.insert("user.ateinsert", id);
+	}
+	public int insertnoRes(String id) {
+		return sqlSession.insert("user.noreserve", id);
+	}
+	public int insertnoResate(String id) {
+		return sqlSession.insert("user.noreserve_update", id);
+	}
+	public ReservationDTO selectRes(String id) {
+		return sqlSession.selectOne("user.rescheck", id);
+	}
+	
+	public QrCodeDTO selectCheck(String id) {
+		return sqlSession.selectOne("user.qrcheck", id);
+	}
+
+}

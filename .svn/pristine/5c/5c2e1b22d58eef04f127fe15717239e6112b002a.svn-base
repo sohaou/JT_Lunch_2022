@@ -1,0 +1,30 @@
+package egovframework.jtLunch.admin.owner.Service.Impl;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import egovframework.jtLunch.admin.owner.DAO.RequestDAO;
+import egovframework.jtLunch.admin.owner.DTO.RequestDTO;
+import egovframework.jtLunch.admin.owner.Service.RequestService;
+
+@Service("RequestService")
+public class RequestServiceImpl implements RequestService{
+	@Inject
+	private RequestDAO dao;
+	
+	public List<?> printRequestAll()throws Exception{ //요청사항 출력
+		return dao.printRequestAll();
+	}
+	public RequestDTO selectRequest(String req_id)throws Exception{//요청사항상세보기
+		return dao.selectRequest(req_id);
+	}
+	public int ownerCheck(String req_id) throws Exception{//식당운영자 요청사항 확인 업데이트
+		return dao.ownerCheck(req_id);
+	}
+	public int adminCheck(String req_id) throws Exception{//관리자 요청사항 확인 업데이트
+		return dao.adminCheck(req_id);
+	}
+}

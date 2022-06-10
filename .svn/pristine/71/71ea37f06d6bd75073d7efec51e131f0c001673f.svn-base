@@ -1,0 +1,18 @@
+package egovframework.jtLunch.main.reservation.DAO;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import egovframework.jtLunch.main.reservation.DTO.ReservationDTO;
+
+@Repository("reservationDAO")
+public class ReservationDAO {
+	
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	
+	public void reserve(ReservationDTO reservationDTO) {
+		sqlSession.insert("reserve.reserve", reservationDTO);
+	}
+}

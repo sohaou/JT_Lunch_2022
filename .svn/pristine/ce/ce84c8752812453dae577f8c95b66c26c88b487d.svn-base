@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="menu">
+<!-- 메뉴 이름 중복 확인 -->
+	<select id="checkMenu" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			menulist 
+		WHERE 
+			menu_name=#{menu_name}
+	</select>
+	<!-- 메뉴 테이블에 메뉴 저장 -->
+	<insert id="MenuInsert">
+		INSERT INTO menulist
+			(
+				menu_id,
+				menu_type,
+				menu_name
+			)
+		VALUES
+			(
+				#{menu_id},
+				#{menu_type},
+				#{menu_name}
+			)	
+	</insert>
+	<!-- DB 메뉴 저장된 모든 메뉴 출력  -->
+	<select id="printMenuAll" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			menu_id, menu_type, menu_name, like_count
+		FROM 
+			menulist
+		ORDER BY 
+			menu_type, menu_name
+	</select>
+	<!-- 메뉴 삭제 -->
+	<delete id="DeleteMenu">
+		DELETE
+		FROM 
+			menulist
+		WHERE 
+			menu_id = #{menu_id}
+	</delete>
+	<!-- 메뉴 수정 -->
+	<update id="UpdateMenu" parameterType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		UPDATE 
+			menulist
+		SET 
+			menu_name=#{menu_name}
+		WHERE 
+			menu_id=#{menu_id}
+	</update>
+	<!-- 수정할 메뉴 정보 가져오기 -->
+	<select id="getUpdateMenu" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			menu_id, menu_type, menu_name, like_count
+		FROM 
+			menulist
+		WHERE
+			menu_id=#{menu_id}
+	</select>
+	<!-- 좋아요 수 상위 10개의 메뉴 출력 -->
+	<select id="selectLikeCount10" resultType="egovframework.jtLunch.admin.owner.DTO.MenuDTO">
+		SELECT 
+			menu_id, menu_type, menu_name, like_count
+		FROM
+			menulist
+		ORDER BY 
+			like_count 
+		DESC 
+			limit 10
+	</select>
+</mapper>
+
